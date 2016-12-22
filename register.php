@@ -11,6 +11,9 @@
   $runner = clean($_POST["runner"]);
   $fbsession = clean($POST["fbsession"]);
 
+    echo "<br />bib=" . $bib;
+    echo "<br />runner=" . $runner;
+    echo "<br />fbsession=" . $fbsession;
   if(isset($bib) && isset($runner) && isset($fbsession)) {
     $m = new MongoClient();
     $db = $m->cmumarathon;
