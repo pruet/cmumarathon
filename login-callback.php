@@ -27,11 +27,30 @@ try {
 }
 
 if (isset($accessToken)) {
-  // Logged in!
-  $_SESSION['facebook_access_token'] = (string) $accessToken;
+  $oAuth2Client = $fb->getOAuth2Client();
 
+// Exchanges a short-lived access token for a long-lived one
+  $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+  // Logged in!
+  $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
   // Now you can redirect to another page and use the
   // access token from $_SESSION['facebook_access_token']
-  echo "OK token=" . (string)$accessToken;
+  if (isset($longLivedAccessToken)) {
+    echo "OK token=" . (string)$longLivedAccessToken;
+  }
 }
 ?>
+<html>
+<head>
+</head>
+<body>
+<table>
+<form method="post" action="/runnertracker/register.php" >
+  <input type="hidden" name="fbsession" value="<?php echo $longLivedAccessToken ?>" />
+  <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
+  <tr><td>Name:</td><td><input type="text" name="runner" /></td></tr>
+  <tr><td><input type="submit" /></td><td><td></tr>
+</form>
+</table>
+</body>
+</html
