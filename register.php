@@ -10,10 +10,6 @@
   $bib = clean($_POST["bib"]);
   $runner = clean($_POST["runner"]);
   $fbsession = clean($_POST["fbsession"]);
-
-    echo "<br />bib=" . $bib;
-    echo "<br />runner=" . $runner;
-    echo "<br />fbsession=" . $fbsession;
   if(isset($bib) && isset($runner) && isset($fbsession)) {
     $m = new MongoClient();
     $db = $m->cmumarathon;
@@ -24,7 +20,23 @@
                  "fbsession" => $fbsession
                  );
     $ret = $coll->insert($document);
-    var_dump($ret);
+    if(isset($ret) && isset($ret["err"]) && $ret["err"] != NULL) {
+      // nothing but lazy
+      ?>
+        <html>
+        <body>
+        Error, try again. 
+        </body>
+        </html>
+        <?php
+    } else {
+      ?>
+        <html>
+        <body>
+        Thanks for registration, see you on the road!
+        </body>
+        </html>
+      <?php
+    }
   }
 ?>
-should be ok
