@@ -43,7 +43,7 @@ if (isset($accessToken)) {
 <body>
 <table>
 <form method="post" action="/runnertracker/register.php" >
-  <input type="hidden" name="fbsession" value="<?php echo $longLivedAccessToken ?>" />
+  <input type="hidden" name="fbsession" value="<?php echo (string)$longLivedAccessToken ?>" />
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
   <tr><td>Name:</td><td><input type="text" name="runner" /></td></tr>
   <tr><td><input type="submit" /></td><td><td></tr>
