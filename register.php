@@ -20,7 +20,8 @@
                  "runner" => $runner,
                  "fbsession" => $fbsession
                  );
-    $coll->insert($document);
+    $ret = $coll->insert($document);
+    var_dump($ret);
   }
 ?>
 should be ok

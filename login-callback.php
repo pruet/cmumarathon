@@ -35,9 +35,6 @@ if (isset($accessToken)) {
   $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
   // Now you can redirect to another page and use the
   // access token from $_SESSION['facebook_access_token']
-  if (isset($longLivedAccessToken)) {
-    echo "OK token=" . (string)$longLivedAccessToken;
-  }
 }
 ?>
 <html>
