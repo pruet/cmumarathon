@@ -9,7 +9,7 @@
   }
   $bib = clean($_POST["bib"]);
   $runner = clean($_POST["runner"]);
-  $fbsession = clean($POST["fbsession"]);
+  $fbsession = clean($_POST["fbsession"]);
 
     echo "<br />bib=" . $bib;
     echo "<br />runner=" . $runner;
