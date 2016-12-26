@@ -45,7 +45,6 @@ if(isset($bib) && isset($cp) && isset($time)) {
       $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
       $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
       $image = $image_base . '?' . $image_query;
-      echo $image;
       try {
         $photoCaption = 'Congratulation!';
         $post_data = array(
