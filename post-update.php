@@ -1,3 +1,5 @@
+<html>
+<body>
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
@@ -5,8 +7,31 @@ require_once __DIR__ . '/config.php';
 if(!session_id()) {
   session_start();
 }
+function clean($in)
+{
+  return $in;
+  /*$t = trim($in);
+  $s = strip_tags($t);
+  $h = htmlspecialchars($s);
+  return $h;*/
+}
+$bib = clean($_POST["bib"]);
+$cp = clean($_POST["cp"]);
+$time = clean($_POST["time"]);
 
-$access_token = 'EAAOrDZA2VPWYBAE04fAVZCyDFuE8ZCr8vZBd97M7YAe0ZA3PnIWPoLvTPHVZCzEJtWZCpZC4lXddAtAeNLwP8kBNpcIByv0zmeCplZCCZApohuaHYvxKrMZBI1fSZAikts5604V6cD8ZB9zPXsRdujknqcZCq9xV8klMuXGfHjXzKAWO3OkwZDZD';
+
+if(isset($bib) && isset($runner) && isset($fbsession)) {
+  $m = new MongoClient();
+  $db = $m->cmumarathon;
+  $coll = $db->runnertracker;
+  $query = array('bib' => $bib);
+  $cursor = $coll->find($query);
+  foreach($cursor as $doc) {
+    $access_token = $doc["fbsession"];
+    echo $access_token;
+  }
+}
+/*$access_token = 'EAAOrDZA2VPWYBAE04fAVZCyDFuE8ZCr8vZBd97M7YAe0ZA3PnIWPoLvTPHVZCzEJtWZCpZC4lXddAtAeNLwP8kBNpcIByv0zmeCplZCCZApohuaHYvxKrMZBI1fSZAikts5604V6cD8ZB9zPXsRdujknqcZCq9xV8klMuXGfHjXzKAWO3OkwZDZD';
 
 $fb = new Facebook\Facebook([
   'app_id' => $app_id,
@@ -35,5 +60,15 @@ if($user) {
   }
 } else {
   echo "no user";
-}
+}*/
 ?>
+<table>
+<form method="post" action="/runnertracker/post-update.php" >
+  <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
+  <tr><td>CP:</td><td><input type="text" name="cp" /></td></tr>
+  <tr><td>time:</td><td><input type="text" name="time" /></td></tr>
+  <tr><td><input type="submit" /></td><td><td></tr>
+</form>
+</table>
+<body>
+<html>
