@@ -41,6 +41,7 @@ if (isset($accessToken)) {
 <head>
 </head>
 <body>
+Please provide us your BIB number and name.
 <table>
 <form method="post" action="/runnertracker/register.php" >
   <input type="hidden" name="fbsession" value="<?php echo (string)$longLivedAccessToken ?>" />

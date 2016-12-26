@@ -1,3 +1,7 @@
+<html>
+<body>
+Please read all the steps before start.<br />
+1. Please login with facebook using following link <br />
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -21,3 +25,8 @@ $loginUrl = $helper->getLoginUrl('https://runnerapi.eng.cmu.ac.th/runnertracker/
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 
 ?>
+2. When Facebook ask for permission, please allow us to post on your wall.<br />
+3. After that, please submit your BIB number and name, to be used on the post.<br />
+4. Done!.
+</body>
+</html>
