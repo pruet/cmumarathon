@@ -20,7 +20,7 @@ $cp = clean($_POST["cp"]);
 $time = clean($_POST["time"]);
 
 
-if(isset($bib) && isset($runner) && isset($fbsession)) {
+if(isset($bib) && isset($cp) && isset($time)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
   $coll = $db->runnertracker;
@@ -53,7 +53,7 @@ if($user) {
       'message' => $photoCaption,
       'url' => 'https://runnerapi.eng.cmu.ac.th/runnertracker/images/badge-c1.png'
     );
-    $apiResponse = $facebook->post('/me/photos', $post_data);
+    $apiResponse = $fb->post('/me/photos', $post_data);
   } catch (FacebookApiException $e) {
     $user = null;
     print_r($e);
@@ -65,6 +65,7 @@ if($user) {
 <table>
 <form method="post" action="/runnertracker/post-update.php" >
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
+  <tr><td>CP:</td><td><select><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
   <tr><td>CP:</td><td><input type="text" name="cp" /></td></tr>
   <tr><td>time:</td><td><input type="text" name="time" /></td></tr>
   <tr><td><input type="submit" /></td><td><td></tr>
