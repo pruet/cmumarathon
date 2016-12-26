@@ -45,13 +45,15 @@ if(isset($bib) && isset($cp) && isset($time)) {
       $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
       $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
       $image = $image_base . '?' . htmlentities($image_query);
+      echo $image;
       try {
-        $photoCaption = 'My photo caption';
+        $photoCaption = 'Congratulation!';
         $post_data = array(
           'message' => $photoCaption,
           'url' => $image
         );
         $apiResponse = $fb->post('/me/photos', $post_data);
+        echo "Done.<br />";
         break;
       } catch (FacebookApiException $e) {
         $user = null;
