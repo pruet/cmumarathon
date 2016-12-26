@@ -18,8 +18,6 @@ function clean($in)
 $bib = clean($_POST["bib"]);
 $cp = clean($_POST["cp"]);
 $time = clean($_POST["time"]);
-
-
 if(isset($bib) && isset($cp) && isset($time)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
@@ -28,6 +26,7 @@ if(isset($bib) && isset($cp) && isset($time)) {
   $cursor = $coll->find($query);
   foreach($cursor as $doc) {
     $access_token = $doc["fbsession"];
+    $name = $doc["runner"];
     $fb = new Facebook\Facebook([
       'app_id' => $app_id,
       'app_secret' => $app_secret,
@@ -42,11 +41,15 @@ if(isset($bib) && isset($cp) && isset($time)) {
       print_r($e);
     }
     if($user) {
+      $pace = "8'7\"/km";
+      $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
+      $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
+      $image = $image_base . '?' . htmlentities($image_query);
       try {
         $photoCaption = 'My photo caption';
         $post_data = array(
           'message' => $photoCaption,
-          'url' => 'https://runnerapi.eng.cmu.ac.th/runnertracker/images/badge-c1.png'
+          'url' => $image
         );
         $apiResponse = $fb->post('/me/photos', $post_data);
         break;
@@ -63,7 +66,13 @@ if(isset($bib) && isset($cp) && isset($time)) {
 <table>
 <form method="post" action="/runnertracker/post-update.php" >
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
-  <tr><td>CP:</td><td><select name="cp"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+  <tr><td>CP:</td><td>
+  <select name="cp">
+  <option value="1">Checkpoint 1</option>
+  <option value="2">Checkpoint 2</option>
+  <option value="3">Checkpoint 3</option>
+  <option value="f">Finished</option>
+  </select></td></tr>
   <tr><td>time:</td><td><input type="text" name="time" /></td></tr>
   <tr><td><input type="submit" /></td><td><td></tr>
 </form>

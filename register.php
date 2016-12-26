@@ -11,6 +11,7 @@
   $runner = clean($_POST["runner"]);
   $fbsession = clean($_POST["fbsession"]);
   if(isset($bib) && isset($runner) && isset($fbsession)) {
+    //TODO block duplicate BIB
     $m = new MongoClient();
     $db = $m->cmumarathon;
     $coll = $db->runnertracker;
