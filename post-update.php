@@ -20,7 +20,7 @@ try {
   $response = $fb->get('/me');
   $user = $response->getGraphUser();
 } catch (FacebookResponseException $e) {
-  error_log($e);
+  print_r($e);
 }
 echo "2";
 if($user) {
@@ -34,7 +34,7 @@ if($user) {
     $apiResponse = $facebook->api('/me/photos', 'POST', $post_data);
   } catch (FacebookApiException $e) {
     $user = null;
-    error_log($e);
+    print_r($e);
   }
 } else {
   echo "no user";
