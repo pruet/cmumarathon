@@ -15,14 +15,14 @@ $fb = new Facebook\Facebook([
 ]);
 
 $fb->setDefaultAccessToken($access_token);
-
+echo "1";
 try {
   $response = $fb->get('/me');
   $user = $response->getGraphUser();
 } catch (FacebookResponseException $e) {
   error_log($e);
 }
-
+echo "2";
 if($user) {
   try {
     $photoCaption = 'My photo caption';
@@ -39,4 +39,5 @@ if($user) {
 } else {
   echo "no user";
 }
+echo "3";
 ?>
