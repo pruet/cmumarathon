@@ -15,23 +15,20 @@ $fb = new Facebook\Facebook([
 ]);
 
 $fb->setDefaultAccessToken($access_token);
-echo "1";
 try {
   $response = $fb->get('/me');
   $user = $response->getGraphUser();
 } catch (FacebookResponseException $e) {
   print_r($e);
 }
-echo "2";
 if($user) {
   try {
     $photoCaption = 'My photo caption';
-    $file = 'images/badge-c1.png';
     $post_data = array(
       'message' => $photoCaption,
-      'srouce' => '@' . realpath($file)
+      'url' => 'https://runnerapi.eng.cmu.ac.th/runnertracker/images/badge-c1.png'
     );
-    $apiResponse = $facebook->api('/me/photos', 'POST', $post_data);
+    $apiResponse = $facebook->post('/me/photos', $post_data);
   } catch (FacebookApiException $e) {
     $user = null;
     print_r($e);
@@ -39,5 +36,4 @@ if($user) {
 } else {
   echo "no user";
 }
-echo "3";
 ?>
