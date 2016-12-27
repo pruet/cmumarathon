@@ -69,9 +69,10 @@ if(isset($bib) && isset($cp) && isset($time)) {
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
   <tr><td>CP:</td><td>
   <select name="cp">
-  <option value="1">Checkpoint 1</option>
-  <option value="2">Checkpoint 2</option>
-  <option value="3">Checkpoint 3</option>
+  <option value="s">Start</option>
+  <option value="1">10k</option>
+  <option value="2">20k</option>
+  <option value="3">30k</option>
   <option value="f">Finished</option>
   </select></td></tr>
   <tr><td>time:</td><td><input type="text" name="time" /></td></tr>
