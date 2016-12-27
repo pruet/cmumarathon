@@ -13,9 +13,9 @@ $font = './niramit.ttf';
 
 $im = imagecreatefrompng($base_image);
 $white = imagecolorallocate($im, 0xFF, 0xFF, 0xFF);
-imagefttext($im, 24, 0, 290, 480, $white, $font, $name);
-imagefttext($im, 22, 0, 210, 590, $white, $font, $time);
-imagefttext($im, 22, 0, 500, 590, $white, $font, $pace);
+imagefttext($im, 60, 0, 290, 530, $white, $font, $name);
+imagefttext($im, 60, 0, 190, 640, $white, $font, $time);
+imagefttext($im, 60, 0, 550, 640, $white, $font, $pace);
 header('Content-Type: image/png');
 imagepng($im);
 imagedestroy($im);

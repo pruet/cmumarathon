@@ -15,6 +15,22 @@ function clean($in)
   $h = htmlspecialchars($s);
   return $h;*/
 }
+function calculatePace($time, $cp)
+{
+  if($cp == 's') {
+    $distance = 0;
+  } else if($cp == 'f') {
+    $distance = 42.195;
+  } else {
+    $distance = (int)$cp * 10;
+  }
+  $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
+  sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+  $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
+  $pace_seconds = $time_second / $distance;
+  return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
+}
+
 $bib = clean($_POST["bib"]);
 $cp = clean($_POST["cp"]);
 $time = clean($_POST["time"]);
@@ -41,7 +57,7 @@ if(isset($bib) && isset($cp) && isset($time)) {
       print_r($e);
     }
     if($user) {
-      $pace = "8'7\"/km";
+      $pace = calculatePace($time, $cp);
       $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
       $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
       $image = $image_base . '?' . $image_query;
@@ -75,7 +91,7 @@ if(isset($bib) && isset($cp) && isset($time)) {
   <option value="3">30k</option>
   <option value="f">Finished</option>
   </select></td></tr>
-  <tr><td>time:</td><td><input type="text" name="time" /></td></tr>
+  <tr><td>time:</td><td><input type="text" name="time" /> (time format: HH:MM:SS</td></tr>
   <tr><td><input type="submit" /></td><td><td></tr>
 </form>
 </table>
