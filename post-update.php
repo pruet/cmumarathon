@@ -19,6 +19,7 @@ function calculatePace($time, $cp)
 {
   if($cp == 's') {
     $distance = 0;
+    return 'N/A';
   } else if($cp == 'f') {
     $distance = 42.195;
   } else {
