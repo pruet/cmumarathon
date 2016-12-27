@@ -18,7 +18,6 @@ function clean($in)
 function calculatePace($time, $cp)
 {
   if($cp == 's') {
-    $distance = 0;
     return 'N/A';
   } else if($cp == 'f') {
     $distance = 42.195;
@@ -28,7 +27,7 @@ function calculatePace($time, $cp)
   $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
   sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
   $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-  $pace_seconds = $time_second / $distance;
+  $pace_seconds = $time_seconds / $distance;
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
@@ -92,7 +91,7 @@ if(isset($bib) && isset($cp) && isset($time)) {
   <option value="3">30k</option>
   <option value="f">Finished</option>
   </select></td></tr>
-  <tr><td>time:</td><td><input type="text" name="time" /> (time format: HH:MM:SS</td></tr>
+  <tr><td>time:</td><td><input type="text" name="time" /> (time format: HH:MM:SS)</td></tr>
   <tr><td><input type="submit" /></td><td><td></tr>
 </form>
 </table>
