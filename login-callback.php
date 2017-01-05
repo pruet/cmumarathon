@@ -26,7 +26,7 @@ try {
   exit;
 }*/
 
-$accessToken = $_GET['at'];
+$accessToken = $_COOKIE['accessToken'];
 
 if (isset($accessToken)) {
   $oAuth2Client = $fb->getOAuth2Client();
