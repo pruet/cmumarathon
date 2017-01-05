@@ -64,9 +64,9 @@ if (isset($accessToken)) {
 <body>
       <div class="jumbotron" id="home">
       <div class="container" >
-        <h1>Welcome to CMU Marathon Runner Tracker Facebook App</h1>
+        <h1>CMU Marathon Runner Tracker Facebook App</h1>
         <p class="lead">
-          Please provide your bib number and name. The name will be shown on the badge post on your Facebook wall. 
+          Please provide your bib number and name. The name will be shown on the badge posted on your Facebook wall. If you have already provided the information, you are all set, please close this browser window.
        </p>
 <form method="post" action="/runnertracker/register.php" >
   <input type="hidden" name="fbsession" value="<?php echo (string)$longLivedAccessToken ?>" />
