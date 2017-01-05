@@ -7,6 +7,8 @@
   <meta name="keywords" content="CMU, Marathon, Tracker, Facebook">
   <meta name="author" content="CMU Marathon Technical Team">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
 </head>
 <body>
 <script>
@@ -19,7 +21,8 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      window.location = 'https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php';
+      document.cookie = 'access_token=' + response.authResponse.accessToken;
+      document.location = 'https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php';
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log into this app.';

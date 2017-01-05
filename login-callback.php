@@ -12,8 +12,8 @@ $fb = new Facebook\Facebook([
   'default_graph_version' => $default_graph_version,
 ]);
 
+/*$_SESSION['FBRLH_state']=$_GET['state'];
 $helper = $fb->getRedirectLoginHelper();
-$_SESSION['FBRLH_state']=$_GET['state'];
 try {
   $accessToken = $helper->getAccessToken();
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
@@ -24,7 +24,9 @@ try {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
-}
+}*/
+
+$accessToken = $_COOKIE['access_token'];
 
 if (isset($accessToken)) {
   $oAuth2Client = $fb->getOAuth2Client();
