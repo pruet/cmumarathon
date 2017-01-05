@@ -30,7 +30,7 @@
       // Logged into your app and Facebook.
       document.getElementBy
       document.getElementById('status').innerHTML = '<p>You have already login to Facebook and grant permission to the App. If you have not register your bib number and name, \
-       please go to <button type="button" class="btn btn-link" id="registButton">registration page</a></p>';
+       please go to <button type="button" class="btn btn-link" id="registButton">registration page</button></p>';
       $("#registButton").click(function(){
        $.redirect('https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php',
         {'accessToken': response.authResponse.accessToken});
