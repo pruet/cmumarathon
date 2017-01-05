@@ -21,8 +21,7 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      document.cookie = 'access_token=' + response.authResponse.accessToken;
-      document.location = 'https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php';
+      document.location = 'https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php?at=' + response.authResponse.accessToken;
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log into this app.';
