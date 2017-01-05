@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en,th">
 <head>
   <title>CMU Marathon Runner Tracker: Login</title>
   <meta charset="UTF-8">
@@ -9,16 +9,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="jquery.redirect.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="starter-template.css" rel="stylesheet">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
 <script>
-  function setCookie(cname, cvalue, exdays) {
-      var d = new Date();
-      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-      var expires = "expires=" + d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
-
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -28,7 +28,7 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      $(window).redirect('https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php',
+      $.redirect('https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php',
         {'accessToken': response.authResponse.accessToken});
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -71,22 +71,91 @@
   }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<!--
-  Below we include the Login Button social plugin. This button uses
-  the JavaScript SDK to present a graphical Login button that triggers
-  the FB.login() function when clicked.
--->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CMU Marathon Runner Tracker</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#home">Home</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#tos">Term of Service</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 
-<fb:login-button
-  scope="public_profile,email,publish_actions"
-  max-rows="1"
-  size="medium"
-  show-faces="true"
-  onlogin="checkLoginState();">
-</fb:login-button>
+    <div class="jumbotron" id="home">
+      <div class="container" >
+        <h1>Welcome to CMU Marathon Runner Tracker Facebook App</h1>
+        <p class="lead">
+          Please review the following <a href="#privacy">privacy policy</a> and <a href="tos">term of service</a>. If you are satisfied with both privacy policy and term of service, please login 
+          to your Facebook account and authorize the required permission using the login botton below. By login and authorize the permission you have hereby accept both privacy policy and term of use.
+    </p>
+      <fb:login-button
+        scope="public_profile,publish_actions"
+        max-rows="1"
+        size="medium"
+        show-faces="true"
+        onlogin="checkLoginState();">
+      </fb:login-button>
 
-<div id="status">
-</div>
+      <div id="status">
+    </div>
+      </div>
+      </div>
+
+      <div class="container">
+        <div class="jumbotron">
+      <div class="starter-template" id="privacy">
+        <h1>Privacy Policy</h1>
+        <h2><span class="label label-default">Our Commitment to Privacy</span></h2>
+        <p>Faculty of Engineering, Chiang Mai University commits to protect your privacy and ensures the protection of your private data. By visiting this page you accept the terms described in this privacy policy.</p>
+        <h2><span class="label label-default">Facebook permissions asked by this Application</span></h2>
+        <div class="row">
+          <div class="col-md-4">
+            <h3>Basic information</h3>
+            <div>Allows the Owner to retrieve some basic information from your Facebook profile.</div>
+          </div>
+          <div class="col-md-4">
+            <h3>Publish on behalf of user</h3>
+            <div>Allows the owner to publish on behalf of you on your Facebook wall</div>
+          </div>
+       </div>
+        <h2><span class="label label-default">Use of the Data and other Data collected</span></h2>
+        <div class="row">
+          <div class="col-md-8">
+            <h3>Access to to your basic public information</h3>
+            <div>Allow the owner to collect your basic public information for the solely use by this Application. The owner will not share the aforemention information with any third parties.</div>
+            </div>
+            </div>
+        <h2><span class="label label-default">Contact information</span></h2>
+        <div class="row">
+          <div class="col-md-8">
+            <h3>Data owner</h3>
+            <div>CMU Marathon Technical Team, Faculty of Engineering, Chiang Mai University</div>
+            <div>mail: support@cmumarathon.com , FB: CMU Marathon 2017</div>
+            </div>
+            </div>
+      </div>
+      </div>
+      </div>
+
+      <div class="container">
+        <div class="jumbotron">
+      <div class="starter-template" id="tos">
+        <h1>Term of Service</h1>
+        <p>CMU Marathon Runner Tracker app (Application) is a free application that enables marathon “runners” (Users) to announce their progress during the course of an event by allowing the Application to post event related details (current position etc.)  through their Facebook profile on behalf of the Users. The Application does not require any user related information besides the user’s Facebook credentials and does NOT store or by any means replicate any provided information. The Application is distributed free of charge and does not provide any warranty of any kind to the Users. The Application team of developers is not by any means responsible of any misuse of the application by the Users and furthermore not responsible for any “undesirable” circumstances that may arise through the use of this application.   </p>
+      </div>
+    </div><!-- /.container -->
+
 
 </body>
 </html>
