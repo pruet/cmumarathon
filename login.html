@@ -7,11 +7,16 @@
   <meta name="keywords" content="CMU, Marathon, Tracker, Facebook">
   <meta name="author" content="CMU Marathon Technical Team">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
 </head>
 <body>
 <script>
+  function setCookie(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
@@ -21,7 +26,7 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      $.cookie('accessToken', response.authResponse.accessToken);
+      setCookie('accessToken', response.authResponse.accessToken, 1);
       window.location.href = 'https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php';
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.

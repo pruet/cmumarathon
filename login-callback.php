@@ -37,6 +37,9 @@ if (isset($accessToken)) {
   $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
   // Now you can redirect to another page and use the
   // access token from $_SESSION['facebook_access_token']
+} else {
+  // sned back to login
+  header('Location: https://runnerapi.eng.cmu.ac.th/runnertracker/login');
 }
 ?>
 <html>
