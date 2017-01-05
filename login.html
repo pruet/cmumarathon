@@ -28,8 +28,13 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      $.redirect('https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php',
+      document.getElementBy
+      document.getElementById('status').innerHTML = 'If you have not register your bib number and name, \
+       please go to <button type="button" class="btn btn-lg btn-default" id="registButton">registration page</a>';
+      $("#registButton").click(function(){
+       $.redirect('https://runnerapi.eng.cmu.ac.th/runnertracker/login-callback.php',
         {'accessToken': response.authResponse.accessToken});
+       });
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log into this app.';
