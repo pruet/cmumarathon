@@ -34,7 +34,8 @@ function calculatePace($time, $cp)
 $bib = clean($_POST["bib"]);
 $cp = clean($_POST["cp"]);
 $time = clean($_POST["time"]);
-if(isset($bib) && isset($cp) && isset($time)) {
+$pass = clean($_POST["pass"]);
+if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && isset($cp) && isset($time)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
   $coll = $db->runnertracker;
@@ -62,9 +63,7 @@ if(isset($bib) && isset($cp) && isset($time)) {
       $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
       $image = $image_base . '?' . $image_query;
       try {
-        $photoCaption = 'Congratulation!';
         $post_data = array(
-          'message' => $photoCaption,
           'url' => $image
         );
         $apiResponse = $fb->post('/me/photos', $post_data);
@@ -82,6 +81,7 @@ if(isset($bib) && isset($cp) && isset($time)) {
 ?>
 <table>
 <form method="post" action="/runnertracker/post-update.php" >
+  <tr><td>Passpharse:</td><td><input type="text" name="pass" /></td></tr>
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
   <tr><td>CP:</td><td>
   <select name="cp">
