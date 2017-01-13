@@ -41,6 +41,7 @@ if (isset($accessToken)) {
   // sned back to login
   header('Location: https://runnerapi.eng.cmu.ac.th/runnertracker/fblogin.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +61,22 @@ if (isset($accessToken)) {
     <link href="starter-template.css" rel="stylesheet">
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script>
+    function checkAll() {
+          document.getElementById("locationStart").checked = true;
+          document.getElementById("location10k").checked = true;
+          document.getElementById("location20k").checked = true;
+          document.getElementById("location30k").checked = true;
+          document.getElementById("locationFinish").checked = true;
+    }
+    function checkNone() {
+          document.getElementById("locationStart").checked = false;
+          document.getElementById("location10k").checked = false;
+          document.getElementById("location20k").checked = false;
+          document.getElementById("location30k").checked = false;
+          document.getElementById("locationFinish").checked = false;
+    }
+  </script>
 </head>
 <body>
       <div class="jumbotron" id="home">
@@ -100,11 +117,13 @@ if (isset($accessToken)) {
           </div>
           <div class="panel-body">
             <div class="checkbox">
-              <label><input type="checkbox" name="distance" value="start" checked />When I'm at the starting point</label><br />
-              <label><input type="checkbox" name="distance" value="10k" checked />When I pass 10k distance</label><br />
-              <label><input type="checkbox" name="distance" value="20k" checked />When I pass 20k distance</label><br />
-              <label><input type="checkbox" name="distance" value="30k" checked />When I pass 30k distance</label><br />
-              <label><input type="checkbox" name="distance" value="finish" checked />When I pass the finish line</label>
+              <label><input id="locationStart" type="checkbox" name="distance" value="start" checked />When I'm at the starting point</label><br />
+              <label><input id="location10k" type="checkbox" name="distance" value="10k" checked />When I pass 10k distance</label><br />
+              <label><input id="location20k" type="checkbox" name="distance" value="20k" checked />When I pass 20k distance</label><br />
+              <label><input id="location30k" type="checkbox" name="distance" value="30k" checked />When I pass 30k distance</label><br />
+              <label><input id="locationFinish" type="checkbox" name="distance" value="finish" checked />When I pass the finish line</label><br />
+              <button type="button" id="locationAll" class="btn btn-default" onClick="checkAll()">At all location</button>
+              <button type="button" id="locationClear" class="btn btn-default" onClick="checkNone()">Clear all</button>
             </div>
           </div>
         </div>
