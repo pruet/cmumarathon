@@ -41,19 +41,19 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
   $coll = $db->runnertracker;
   switch($cp) {
     case 's':
-      $location = 'locationStart';
+      $location = 'start';
       break;
     case '1':
-      $location = 'location10k';
+      $location = '10k';
       break;
     case '2':
-      $location = 'location20k';
+      $location = '20k';
       break;
     case '3':
-      $location = 'location30k';
+      $location = '30k';
       break;
     case 'f':
-      $location = 'locationFinish';
+      $location = 'finish';
       break;
   }
   $query = array('bib' => $bib, $location => 'on');
