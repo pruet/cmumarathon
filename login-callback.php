@@ -100,10 +100,10 @@ if (isset($accessToken)) {
           </div>
           <div class="panel-body">
             <div class="checkbox">
-              <label><input type="checkbox" name="distance" value="start" checked />When I'm at the starting point</label>
-              <label><input type="checkbox" name="distance" value="10k" checked />When I pass 10k distance</label>
-              <label><input type="checkbox" name="distance" value="20k" checked />When I pass 20k distance</label>
-              <label><input type="checkbox" name="distance" value="30k" checked />When I pass 30k distance</label>
+              <label><input type="checkbox" name="distance" value="start" checked />When I'm at the starting point</label><br />
+              <label><input type="checkbox" name="distance" value="10k" checked />When I pass 10k distance</label><br />
+              <label><input type="checkbox" name="distance" value="20k" checked />When I pass 20k distance</label><br />
+              <label><input type="checkbox" name="distance" value="30k" checked />When I pass 30k distance</label><br />
               <label><input type="checkbox" name="distance" value="finish" checked />When I pass the finish line</label>
             </div>
           </div>
