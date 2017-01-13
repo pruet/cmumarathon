@@ -39,7 +39,24 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
   $m = new MongoClient();
   $db = $m->cmumarathon;
   $coll = $db->runnertracker;
-  $query = array('bib' => $bib);
+  switch($cp) {
+    case 's':
+      $location = 'locationStart';
+      break;
+    case '1':
+      $location = 'location10k';
+      break;
+    case '2':
+      $location = 'location20k';
+      break;
+    case '3':
+      $location = 'location30k';
+      break;
+    case 'f':
+      $location = 'locationFinish';
+      break;
+  }
+  $query = array('bib' => $bib, $location => 'on');
   $cursor = $coll->find($query);
   foreach($cursor as $doc) {
     $access_token = $doc["fbsession"];
@@ -67,7 +84,7 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
           'url' => $image
         );
         $apiResponse = $fb->post('/me/photos', $post_data);
-        echo "Done.<br />";
+        echo "Progress posted.<br />";
         break;
       } catch (FacebookApiException $e) {
         $user = null;
