@@ -25,15 +25,19 @@
 <?php
   function clean($in)
   {
-    return $in;
-    /*$t = trim($in);
-    $s = strip_tags($t);
-    $h = htmlspecialchars($s);
-    return $h;*/
+    $h = trim($in);
+    $h = strip_tags($h);
+    $h = htmlspecialchars($h);
+    return $h;
   }
-  $bib = clean($_POST["bib"]);
-  $runner = clean($_POST["runner"]);
-  $fbsession = clean($_POST["fbsession"]);
+  $bib = clean($_POST['bib']);
+  $runner = clean($_POST['runner']);
+  $fbsession = clean($_POST['fbsession']);
+  $locationStart = $_POST['locationStart'];
+  $location10k = $_POST['location10k'];
+  $location20k = $_POST['location20k'];
+  $location30k = $_POST['location30k'];
+  $locationFinish = $_POST['locationFinish'];
   if(isset($bib) && isset($runner) && isset($fbsession)) {
     $m = new MongoClient();
     $db = $m->cmumarathon;
@@ -46,9 +50,14 @@
 
     } else {
       $document = array(
-                  "bib" => $bib,
-                  "runner" => $runner,
-                  "fbsession" => $fbsession
+                  'bib' => $bib,
+                  'runner' => $runner,
+                  'fbsession' => $fbsession,
+                  'start' => $locationStart,
+                  '10k' => $location10k,
+                  '20k' => $location20k,
+                  '30k' => $location30k,
+                  'finish' => $locationFinish,
                   );
       $ret = $coll->insert($document);
       if(isset($ret) && isset($ret["err"]) && $ret["err"] != NULL) {

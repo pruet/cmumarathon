@@ -113,7 +113,7 @@ if (isset($accessToken)) {
        <div class="col-sm-8">
          <div class="panel panel-default">
            <div class="panel-heading">
-          <h3 class="panel-title"When do you want to publish your progress on your facebook wall ?</h3>
+          <h3 class="panel-title">When do you want to publish your progress on your facebook wall ?</h3>
           </div>
           <div class="panel-body">
             <div class="checkbox">
@@ -122,7 +122,7 @@ if (isset($accessToken)) {
               <label><input id="location20k" type="checkbox" name="distance" value="20k" checked />When I pass 20k distance</label><br />
               <label><input id="location30k" type="checkbox" name="distance" value="30k" checked />When I pass 30k distance</label><br />
               <label><input id="locationFinish" type="checkbox" name="distance" value="finish" checked />When I pass the finish line</label><br />
-              <button type="button" id="locationAll" class="btn btn-default" onClick="checkAll()">Check alln</button>
+              <button type="button" id="locationAll" class="btn btn-default" onClick="checkAll()">Check all</button>
               <button type="button" id="locationClear" class="btn btn-default" onClick="checkNone()">Clear all</button>
             </div>
           </div>
