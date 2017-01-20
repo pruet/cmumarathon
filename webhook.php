@@ -58,49 +58,14 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
   if(($doc = $collrt->findOne($query)) != NULL) {
     // check that we never post it before
     if($db->postlog->count(array('bib' => $bib, $cp=> 'on')) == 0) {
-      $access_token = $doc["fbsession"];
-      $name = $doc["runner"];
-      $fb = new Facebook\Facebook([
-        'app_id' => $app_id,
-        'app_secret' => $app_secret,
-        'default_graph_version' => $default_graph_version,
-      ]);
-
-      $fb->setDefaultAccessToken($access_token);
-      try {
-        $response = $fb->get('/me');
-        $user = $response->getGraphUser();
-      } catch (FacebookResponseException $e) {
-        http_response_code(500);
-        print_r($e);
-        die();
-      }
-      if($user) {
-        $pace = calculatePace($time, $cp);
-        $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
-        $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
-        $image = $image_base . '?' . $image_query;
-        try {
-          $post_data = array(
-            'url' => $image
-          );
-          $apiResponse = $fb->post('/me/photos', $post_data);
-          if(!$apiResponse->isError()) {
-            echo "Progress posted.<br />";
-            // save to log
-            $db->postlog->insert(array('bib' => $bib, $cp=>'on'));
-          }
-        } catch (FacebookApiException $e) {
-          $user = null;
-          http_response_code(500);
-          print_r($e);
-          die();
-        }
-      } else {
-        http_response_code(404);
-        header('HTTP/1.0 404 Not Found', true, 404);
-        die();
-      }
+      // add request to db
+      $db->request->insert(array(
+        'bib' => $bib,
+        $cp => 'on',
+        'time' => $time,
+        'token' => $doc["fbsession"],
+        'runner' => $doc["runner"]
+        ));
     }
   }
 }
