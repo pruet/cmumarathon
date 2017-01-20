@@ -1,20 +1,16 @@
-<html>
-<body>
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
 
-if(!session_id()) {
-  session_start();
-}
 function clean($in)
 {
   return $in;
-  /*$t = trim($in);
+  $t = trim($in);
   $s = strip_tags($t);
   $h = htmlspecialchars($s);
-  return $h;*/
+  return $h;
 }
+
 function calculatePace($time, $cp)
 {
   if($cp == 's') {
@@ -31,74 +27,82 @@ function calculatePace($time, $cp)
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
-$bib = clean($_POST["bib"]);
-$cp = clean($_POST["cp"]);
-$time = clean($_POST["time"]);
-$pass = clean($_POST["pass"]);
+if(!session_id()) {
+  session_start();
+}
+
+// Check request type
+$type = clean($_POST["type"]);
+if($type == 'json') {
+  $js = json_decode($_POST['payload']);
+  $bib = clean($js->bib);
+  $cp = clean($js->cp);
+  $time = clean($js->time);
+  $pass = clean($js->pass);
+} else {
+  $bib = clean($_POST["bib"]);
+  $cp = clean($_POST["cp"]);
+  $time = clean($_POST["time"]);
+  $pass = clean($_POST["tk"]);
+}
+
+// Check parameters
 if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && isset($cp) && isset($time)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
-  $coll = $db->runnertracker;
-  switch($cp) {
-    case 's':
-      $location = 'start';
-      break;
-    case '1':
-      $location = '10k';
-      break;
-    case '2':
-      $location = '20k';
-      break;
-    case '3':
-      $location = '30k';
-      break;
-    case 'f':
-      $location = 'finish';
-      break;
-  }
-  $query = array('bib' => $bib, $location => 'on');
-  $cursor = $coll->find($query);
-  foreach($cursor as $doc) {
-    $access_token = $doc["fbsession"];
-    $name = $doc["runner"];
-    $fb = new Facebook\Facebook([
-      'app_id' => $app_id,
-      'app_secret' => $app_secret,
-      'default_graph_version' => $default_graph_version,
-    ]);
+  $collrt = $db->runnertracker;
 
-    $fb->setDefaultAccessToken($access_token);
-    try {
-      $response = $fb->get('/me');
-      $user = $response->getGraphUser();
-    } catch (FacebookResponseException $e) {
-      print_r($e);
-    }
-    if($user) {
-      $pace = calculatePace($time, $cp);
-      $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
-      $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
-      $image = $image_base . '?' . $image_query;
+// check if user (bib) want to post at this location (cp)
+  $query = array('bib' => $bib, $cp => 'on');
+  if(($doc = $collrt->findOne($query)) != NULL) {
+    // check that we never post it before
+    if($db->postlog->count(array('bib' => $bib, $cp=> 'on')) == 0) {
+      $access_token = $doc["fbsession"];
+      $name = $doc["runner"];
+      $fb = new Facebook\Facebook([
+        'app_id' => $app_id,
+        'app_secret' => $app_secret,
+        'default_graph_version' => $default_graph_version,
+      ]);
+
+      $fb->setDefaultAccessToken($access_token);
       try {
-        $post_data = array(
-          'url' => $image
-        );
-        $apiResponse = $fb->post('/me/photos', $post_data);
-        echo "Progress posted.<br />";
-        break;
-      } catch (FacebookApiException $e) {
-        $user = null;
+        $response = $fb->get('/me');
+        $user = $response->getGraphUser();
+      } catch (FacebookResponseException $e) {
         print_r($e);
       }
-    } else {
-      echo "no user";
+      if($user) {
+        $pace = calculatePace($time, $cp);
+        $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
+        $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
+        $image = $image_base . '?' . $image_query;
+        try {
+          $post_data = array(
+            'url' => $image
+          );
+          $apiResponse = $fb->post('/me/photos', $post_data);
+          if(!$apiResponse->isError()) {
+            echo "Progress posted.<br />";
+            // save to log
+            $db->postlog->insert(array('bib' => $bib, $cp=>'on'));
+          }
+        } catch (FacebookApiException $e) {
+          $user = null;
+          print_r($e);
+        }
+      } else {
+        echo "no user";
+      }
     }
   }
 }
 ?>
+<html>
+<body>
 <table>
 <form method="post" action="/runnertracker/post-update.php" >
-  <tr><td>Passpharse:</td><td><input type="text" name="pass" /></td></tr>
+  <tr><td>Passpharse:</td><td><input type="text" name="tk" /></td></tr>
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
   <tr><td>CP:</td><td>
   <select name="cp">

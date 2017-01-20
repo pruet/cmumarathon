@@ -1,3 +1,47 @@
+<?php
+  function clean($in)
+  {
+    $h = trim($in);
+    $h = strip_tags($h);
+    $h = htmlspecialchars($h);
+    return $h;
+  }
+  $bib = clean($_POST['bib']);
+  $runner = clean($_POST['runner']);
+  $fbsession = clean($_POST['fbsession']);
+  $locationStart = $_POST['locationStart'];
+  $location10k = $_POST['location10k'];
+  $location20k = $_POST['location20k'];
+  $location30k = $_POST['location30k'];
+  $locationFinish = $_POST['locationFinish'];
+  if(isset($bib) && isset($runner) && isset($fbsession)) {
+    $m = new MongoClient();
+    $db = $m->cmumarathon;
+    $coll = $db->runnertracker;
+    $count = $db->runnertracker->count(array('bib' => $bib));
+    if($count > 0) {
+       $status = "Error, duplicate bib number.";
+    } else {
+      $document = array(
+                  'bib' => $bib,
+                  'runner' => $runner,
+                  'fbsession' => $fbsession,
+                  's' => $locationStart,
+                  '1' => $location10k,
+                  '2' => $location20k,
+                  '3' => $location30k,
+                  'f' => $locationFinish,
+                  );
+      $ret = $coll->insert($document);
+      if(isset($ret) && isset($ret["err"]) && $ret["err"] != NULL) {
+          $status = "Error, try again.";
+      } else {
+          $status = "Thanks for registration, see you on the road!";
+      }
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,57 +66,9 @@
       <div class="container" >
         <h1>CMU Marathon Runner Tracker Facebook App</h1>
         <p class="lead">
-<?php
-  function clean($in)
-  {
-    $h = trim($in);
-    $h = strip_tags($h);
-    $h = htmlspecialchars($h);
-    return $h;
-  }
-  $bib = clean($_POST['bib']);
-  $runner = clean($_POST['runner']);
-  $fbsession = clean($_POST['fbsession']);
-  $locationStart = $_POST['locationStart'];
-  $location10k = $_POST['location10k'];
-  $location20k = $_POST['location20k'];
-  $location30k = $_POST['location30k'];
-  $locationFinish = $_POST['locationFinish'];
-  if(isset($bib) && isset($runner) && isset($fbsession)) {
-    $m = new MongoClient();
-    $db = $m->cmumarathon;
-    $coll = $db->runnertracker;
-    $count = $db->runnertracker->count(array('bib' => $bib));
-    if($count > 0) {
-      ?>
-        Error, duplicate bib number
-        <?php
-
-    } else {
-      $document = array(
-                  'bib' => $bib,
-                  'runner' => $runner,
-                  'fbsession' => $fbsession,
-                  'start' => $locationStart,
-                  '10k' => $location10k,
-                  '20k' => $location20k,
-                  '30k' => $location30k,
-                  'finish' => $locationFinish,
-                  );
-      $ret = $coll->insert($document);
-      if(isset($ret) && isset($ret["err"]) && $ret["err"] != NULL) {
-        // nothing but lazy
-         ?>
-          Error, try again. 
-          <?php
-      } else {
+        <?php 
+          echo $status; 
         ?>
-          Thanks for registration, see you on the road!
-        <?php
-      }
-    }
-  }
-?>
-</p></div></div>
+        </p></div></div>
           </body>
           </html>

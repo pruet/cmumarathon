@@ -7,8 +7,6 @@ $time = $_GET["time"];
 $pace = $_GET["pace"];
 $cp = $_GET["cp"];
 $base_image = 'images/badge-c' . $cp . '.png';
-//$time = '12:34:56';
-//$pace = "8'7\"/km";
 $font = './niramit.ttf';
 
 $im = imagecreatefrompng($base_image);
