@@ -32,13 +32,14 @@ if(!session_id()) {
 }
 
 // Check request type
-$type = clean($_POST["type"]);
+$type = clean($_GET["type"]);
 if($type == 'json') {
-  $js = json_decode($_POST['payload']);
+  $json = file_get_contents('php://input');
+  $js = json_decode($json);
   $bib = clean($js->bib);
   $cp = clean($js->cp);
   $time = clean($js->time);
-  $pass = clean($js->pass);
+  $pass = clean($js->tk);
 } else {
   $bib = clean($_POST["bib"]);
   $cp = clean($_POST["cp"]);
@@ -96,6 +97,9 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
       }
     }
   }
+}
+if($type == 'json') {
+  return;
 }
 ?>
 <html>
