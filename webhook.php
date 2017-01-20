@@ -61,7 +61,7 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
       // add request to db
       $db->request->insert(array(
         'bib' => $bib,
-        $cp => 'on',
+        'cp' => $cp,
         'time' => $time,
         'token' => $doc["fbsession"],
         'runner' => $doc["runner"]
