@@ -109,7 +109,10 @@ if($isParent) {
   echo "This is child #" . $myCount . "\n";
   while(true) {
     if(($doc = $db->selectCollection("queue" + $myCount)->findOne())!= NULL) {
+      echo "Child #" . $myCount . "\n";
       print_r($doc);
+    } else {
+      sleep(30);
     }
   }
 }
