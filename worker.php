@@ -54,9 +54,7 @@ function postFacebook($access_token, $cp, $name, $time, $pace)
       );
       $apiResponse = $fb->post('/me/photos', $post_data);
       if(!$apiResponse->isError()) {
-        echo "Progress posted.<br />";
-        // save to log
-        $db->postlog->insert(array('bib' => $bib, $cp=>'on'));
+        return 200;
       }
     } catch (FacebookApiException $e) {
       $user = null;
@@ -65,73 +63,53 @@ function postFacebook($access_token, $cp, $name, $time, $pace)
   } else {
     return 404;
   }
-  return 200;
+  return 500;
 }
 
-class Worker extends Threaded {
-  protected $complete;
-
-  public function __construct($doc) 
-  {
-    $this->complete = false;
-    $this->doc = $doc;
-  }
-
-  public function run()
-  {
-    $this->out = $this->doc['bib'];
-    $this->complete = true;
-  }
-
-  public function isGarbage()
-  {
-    return $this->complete;
-  }
-}
-
-class WorkerPool extends Pool
-{
-  public function process()
-  {
-    while(count($this->work)) {
-      $this->collect(function (Worker $task) {
-        if($task->isGarbage()) {
-          $tmpObj = new stdclass();
-          $tmpObj->complete = $task->complete;
-          $this->data[] = $tmpObj;
-        }
-        return $task->isGarbage(); 
-      });
-    }
-    $this->shutdown();
-    return $this->data;
+$isParent = true;
+$myCount = 0;
+$pidArray = [];
+$childCount = 10;
+for($i = 0; $i != $childCount; $i++) {
+  $pid = pcntl_fork();
+  $pidArray[] = $pid;
+  if($pid == -1) {
+    die('fork failed');
+  } elseif($pid) { //parent
+    echo "fork a child with " . $pid;
+    echo "\n";
+    $isParent = true;
+  } else { //children
+    $isParent = false;
+    $myCount = $i;
+    break;
   }
 }
-// query mango db for lastest update
-
 $m = new MongoClient();
 $db = $m->cmumarathon;
-
-// get 100 req from request
-while(true) {
-  echo "Next round<br/>";
-  $pool = new WorkerPool(10);
-  if(($docs = $db->request->find()->limit(100)) != NULL) {
-    foreach($docs as $doc) {
-      $pool->submit(new Worker($doc));
-    } 
-    $retAttr = $pool->process();
+if($isParent) {
+  echo "This is parent process\n";
+  $count = 0;
+  while(true) {
+    if(($docs = $db->request->find()->limit(100)) != NULL) {
+      $col = $db->selectCollection("queue" . $count);
+      foreach($docs as $doc) {
+        $col->insert($doc);
+        $count++;
+        if($count > $childCount) $count = 0;
+      }
+    }
+    sleep(30);
   }
-  print_r($retArr);
-  usleep(30000000);
+  foreach($pidArray as $pid) {
+    pcntl_waitpid($pid, $status);
+    echo "Child "  . $pid . " with status " . $status . "\n";
+  }
+} else { // child
+  echo "This is child #" . $myCount . "\n";
+  while(true) {
+    if(($doc = $db->selectCollection("queue" + $myCount)->findOne())!= NULL) {
+      print_r($doc);
+    }
+  }
 }
-// get new thread from thread pool
-
-// send query to fb
-
-// update  request table
-
-
-// Check request type
-
-?>
