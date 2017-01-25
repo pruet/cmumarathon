@@ -123,6 +123,7 @@ while(true) {
     $retAttr = $pool->process();
   }
   print_r($retArr);
+  usleep(30000000);
 }
 // get new thread from thread pool
 
