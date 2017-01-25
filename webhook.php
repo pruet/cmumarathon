@@ -51,21 +51,22 @@ if($type == 'json') {
 if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && isset($cp) && isset($time)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
-  $collrt = $db->runnertracker;
 
 // check if user (bib) want to post at this location (cp)
   $query = array('bib' => $bib, $cp => 'on');
-  if(($doc = $collrt->findOne($query)) != NULL) {
+  if(($doc = $db->runnertracker->findOne($query)) != NULL) {
     // check that we never post it before
     if($db->postlog->count(array('bib' => $bib, $cp=> 'on')) == 0) {
-      // add request to db
-      $db->request->insert(array(
+      $query = array(
         'bib' => $bib,
         'cp' => $cp,
         'time' => $time,
         'token' => $doc["fbsession"],
         'runner' => $doc["runner"]
-        ));
+      );
+      // add request to db
+      $db->request->insert($query); // this will be removed by worker
+      $db->runnerlog->insert($query); // this will be permanent
     }
   }
 }
