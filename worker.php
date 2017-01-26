@@ -73,8 +73,7 @@ function post_facebook($access_token, $cp, $name, $time)
 $isParent = true;
 $myCount = 0;
 $pidArray = [];
-$childCount = 10;
-for($i = 0; $i != $childCount; $i++) {
+for($i = 0; $i != $child_count; $i++) {
   $pid = pcntl_fork();
   $pidArray[] = $pid;
   if($pid == -1) {
