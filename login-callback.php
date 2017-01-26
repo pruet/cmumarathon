@@ -39,7 +39,7 @@ if (isset($accessToken)) {
   // access token from $_SESSION['facebook_access_token']
 } else {
   // sned back to login
-  header('Location: https://cmumarathon.com/fblogin.php');
+  header('Location: https://cmumarathon.com/fblogin.html');
 }
 
 ?>
@@ -54,7 +54,6 @@ if (isset($accessToken)) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="jquery.redirect.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -86,7 +85,7 @@ if (isset($accessToken)) {
     <p class="lead">
       Please provide your bib number, name and when you want to publish your progress. The name will be shown on the badge posted on your Facebook wall. If you have already provided the information, you are all set, please close this browser window and see you on the race day!.
     </p>
-<form method="post" action="/runnertracker/register.php" data-toggle="validator" role="form">
+<form method="post" action="/runnertracker/register.php">
   <input type="hidden" name="fbsession" value="<?php echo (string)$longLivedAccessToken ?>" />
    <div class="row">
         <div class="col-sm-4">
@@ -96,7 +95,6 @@ if (isset($accessToken)) {
             </div>
             <div class="panel-body">
               <input type="number" min="0" max="9999" maxlength="4" name="bib" class="form-control" required/> Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
-              <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             </div>
           </div>
         </div>
