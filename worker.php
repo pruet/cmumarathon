@@ -93,8 +93,8 @@ if($isParent) {
   $count = 0;
   while(true) {
     if(($docs = $db->request->find()->limit(100)) != NULL) {
-      echo "add doc to child #" . $count . "\n";
       foreach($docs as $doc) {
+        echo "add doc to child #" . $count . "\n";
         //TODO check the response?
         $db->selectCollection("queue" . $count)->insert($doc);
         $db->request->remove(array('_id' => $doc['_id']));
