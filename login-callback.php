@@ -39,7 +39,7 @@ if (isset($accessToken)) {
   // access token from $_SESSION['facebook_access_token']
 } else {
   // sned back to login
-  header('Location: https://runnerapi.eng.cmu.ac.th/runnertracker/fblogin.php');
+  header('Location: https://cmumarathon.com/fblogin.php');
 }
 
 ?>
@@ -96,6 +96,7 @@ if (isset($accessToken)) {
             </div>
             <div class="panel-body">
               <input type="text" pattern="^[0-9]{4}$" maxlength="4" name="bib" class="form-control" required/> Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
+              <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             </div>
           </div>
         </div>
