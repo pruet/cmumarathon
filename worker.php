@@ -101,7 +101,7 @@ if($isParent) {
         $db->selectCollection("queue" . $count)->insert($doc);
         $db->runnerrequest->remove(array('_id' => $doc['_id']));
         $count++;
-        if($count > $childCount) $count = 0;
+        if($count > $child_count) $count = 0;
       }
     }
     sleep($parent_delay);
