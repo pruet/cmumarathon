@@ -29,6 +29,9 @@ function calculatePace($time, $cp)
 
 function post_facebook($access_token, $cp, $name, $time)
 {
+  global $app_id;
+  global $app_secret;
+  global $default_graph_version;
   $pace = calculatePace($time, $cp);
   // check that we never post it before
   $fb = new Facebook\Facebook([
