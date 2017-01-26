@@ -95,7 +95,7 @@ if (isset($accessToken)) {
               <h3 class="panel-title" class="control-label">Bib number</h3>
             </div>
             <div class="panel-body">
-              <input type="text" name="bib" class="form-control" /> Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
+              <input type="text" pattern="^[0-9]{4}$" maxlength="4" name="bib" class="form-control" required/> Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ if (isset($accessToken)) {
               <h3 class="panel-title" class="control-label">Name</h3>
             </div>
             <div class="panel-body">
-              <input type="text" pattern="^[0-9]{4}$" maxlength="4" name="runner" class="form-control" required/>
+              <input type="text" name="runner" maxlength="10" class="form-control" required/> This name will be shown on the Facebook post, at most 10 characters.
             </div>
           </div>
         </div>
