@@ -116,11 +116,9 @@ if($isParent) {
   echo "This is child #" . $myCount . "\n";
   while(true) {
     if(($doc = $myCol->findOne())!= NULL) {
-      //function postFacebook($access_token, $cp, $name, $time, $pace)
-      echo "Child #" . $myCount . " get request\n";
       // post facebook
       if($db->postlog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
-        echo "Post FB bib:" . $doc['bib'] . " cp:" . $doc['bib']. "\n";
+        echo "Child " . $myCount . " post FB bib:" . $doc['bib'] . " cp:" . $doc['cp']. "\n";
         $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] );
         if($ret == 200 || $ret == 404) {
           if($ret == 200) {
