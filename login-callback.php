@@ -95,7 +95,7 @@ if (isset($accessToken)) {
               <h3 class="panel-title" class="control-label">Bib number</h3>
             </div>
             <div class="panel-body">
-              <input type="number" maxlength="4" name="bib" class="form-control" required/> Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
+              <input type="number" min="0" max="9999" maxlength="4" name="bib" class="form-control" required/> Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
               <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             </div>
           </div>
