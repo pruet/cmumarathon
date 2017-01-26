@@ -104,7 +104,7 @@ if($isParent) {
         if($count > $childCount) $count = 0;
       }
     }
-    sleep(30);
+    sleep($parent_delay);
   }
   foreach($pidArray as $pid) {
     pcntl_waitpid($pid, $status);
@@ -131,7 +131,7 @@ if($isParent) {
           $myCol->remove(array('_id' => $doc['_id']));
       }
     } else {
-      sleep(30);
+      sleep($child_delay);
     }
   }
 }
