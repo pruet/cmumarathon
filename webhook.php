@@ -54,7 +54,7 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
 
 // check if user (bib) want to post at this location (cp)
   $query = array('bib' => $bib, $cp => 'on');
-  if(($doc = $db->runnertracker->findOne($query)) != NULL) {
+  if(($doc = $db->runnertracker->findOne(array('bib' => $bib, 'cp' => $cp))) != NULL) {
     // check that we never post it before
     if($db->postlog->count(array('bib' => $bib, $cp=> 'on')) == 0) {
       $query = array(

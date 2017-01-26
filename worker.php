@@ -27,8 +27,9 @@ function calculatePace($time, $cp)
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
-function postFacebook($access_token, $cp, $name, $time, $pace)
+function postFacebook($access_token, $cp, $name, $time)
 {
+  $pace = calculatePace($time, $cp);
   // check that we never post it before
   $fb = new Facebook\Facebook([
     'app_id' => $app_id,
@@ -92,9 +93,11 @@ if($isParent) {
   $count = 0;
   while(true) {
     if(($docs = $db->request->find()->limit(100)) != NULL) {
-      $col = $db->selectCollection("queue" . $count);
+      echo "add doc to child #" . $count . "\n";
       foreach($docs as $doc) {
-        $col->insert($doc);
+        //TODO check the response?
+        $db->selectCollection("queue" . $count)->insert($doc);
+        $db->request->remove(array('_id' => $doc['_id']));
         $count++;
         if($count > $childCount) $count = 0;
       }
@@ -109,8 +112,22 @@ if($isParent) {
   echo "This is child #" . $myCount . "\n";
   while(true) {
     if(($doc = $db->selectCollection("queue" + $myCount)->findOne())!= NULL) {
+      //function postFacebook($access_token, $cp, $name, $time, $pace)
       echo "Child #" . $myCount . "\n";
-      print_r($doc);
+      // post facebook
+      if($db->postlog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
+        $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] );
+        if($ret == 200 || $ret == 404) {
+          if($ret == 200) {
+            // remove from postlog
+            $db->postlog->insert($doc);
+          }
+          // remove from queue
+          $db->selectCollection("queue" + $myCount)->remove(array('_id' => $doc['_id']));
+        }
+      } else {
+          $db->selectCollection("queue" + $myCount)->remove(array('_id' => $doc['_id']));
+      }
     } else {
       sleep(30);
     }
