@@ -109,9 +109,10 @@ if($isParent) {
     echo "Child "  . $pid . " with status " . $status . "\n";
   }
 } else { // child
+  $myCol = $db->selectCollection("queue" . $myCount);
   echo "This is child #" . $myCount . "\n";
   while(true) {
-    if(($doc = $db->selectCollection("queue" + $myCount)->findOne())!= NULL) {
+    if(($doc = $myCol->findOne())!= NULL) {
       //function postFacebook($access_token, $cp, $name, $time, $pace)
       echo "Child #" . $myCount . "\n";
       // post facebook
@@ -123,10 +124,10 @@ if($isParent) {
             $db->postlog->insert($doc);
           }
           // remove from queue
-          $db->selectCollection("queue" + $myCount)->remove(array('_id' => $doc['_id']));
+          $myCol->remove(array('_id' => $doc['_id']));
         }
       } else {
-          $db->selectCollection("queue" + $myCount)->remove(array('_id' => $doc['_id']));
+          $myCol->remove(array('_id' => $doc['_id']));
       }
     } else {
       sleep(30);
