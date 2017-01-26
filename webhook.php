@@ -54,9 +54,9 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
 
 // check if user (bib) want to post at this location (cp)
   $query = array('bib' => $bib, $cp => 'on');
-  if(($doc = $db->runnertracker->findOne(array('bib' => $bib, 'cp' => $cp))) != NULL) {
+  if(($doc = $db->runnertracker->findOne(array('bib' => $bib, $cp => 'on'))) != NULL) {
     // check that we never post it before
-    if($db->postlog->count(array('bib' => $bib, $cp=> 'on')) == 0) {
+    if($db->postlog->count(array('bib' => $bib, 'cp'=> $cp)) == 0) {
       $query = array(
         'bib' => $bib,
         'cp' => $cp,
@@ -65,7 +65,7 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
         'runner' => $doc["runner"]
       );
       // add request to db
-      $db->request->insert($query); // this will be removed by worker
+      $db->runnerrequest->insert($query); // this will be removed by worker
       $db->runnerlog->insert($query); // this will be permanent
     }
   }

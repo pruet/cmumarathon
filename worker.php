@@ -27,7 +27,7 @@ function calculatePace($time, $cp)
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
-function postFacebook($access_token, $cp, $name, $time)
+function post_facebook($access_token, $cp, $name, $time)
 {
   $pace = calculatePace($time, $cp);
   // check that we never post it before
@@ -92,12 +92,12 @@ if($isParent) {
   echo "This is parent process\n";
   $count = 0;
   while(true) {
-    if(($docs = $db->request->find()->limit(100)) != NULL) {
+    if(($docs = $db->runnerrequest->find()->limit(100)) != NULL) {
       foreach($docs as $doc) {
         echo "add doc to child #" . $count . "\n";
         //TODO check the response?
         $db->selectCollection("queue" . $count)->insert($doc);
-        $db->request->remove(array('_id' => $doc['_id']));
+        $db->runnerrequest->remove(array('_id' => $doc['_id']));
         $count++;
         if($count > $childCount) $count = 0;
       }
@@ -114,9 +114,10 @@ if($isParent) {
   while(true) {
     if(($doc = $myCol->findOne())!= NULL) {
       //function postFacebook($access_token, $cp, $name, $time, $pace)
-      echo "Child #" . $myCount . "\n";
+      echo "Child #" . $myCount . " get request\n";
       // post facebook
       if($db->postlog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
+        echo "Post FB bib:" . $doc['bib'] . " cp:" . $doc['bib']. "\n";
         $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] );
         if($ret == 200 || $ret == 404) {
           if($ret == 200) {
