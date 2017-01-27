@@ -31,7 +31,7 @@ function calculate_pace($time, $cp)
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
-function post_facebook($access_token, $cp, $name, $time)
+function post_facebook($access_token, $cp, $name, $time, &$api_response) 
 {
   global $app_id;
   global $app_secret;
@@ -134,7 +134,15 @@ if($is_parent) {
       if($db->postlog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
         echo "Child " . $my_count . " post FB bib:" . $doc['bib'] . " cp:" . $doc['cp']. "\n";
         // post facebook
-        $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] );
+        $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] , $api_response);
+        // save response for future use
+        $db->fbresponse->insert(array(
+            'bib'=>$doc['bib'],
+            'token'=>$doc['token'],
+            'cp'=>$doc['cp'],
+            'time'=>$doc['time'],
+            'response'=>json_decode($api_response->getBody())
+        ));
         if($ret == 200 || $ret == 404) {
           if($ret == 200) {
             // post ok, save to  postlog
