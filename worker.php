@@ -11,8 +11,9 @@ function clean($in)
   return $h;
 }
 
-function calculatePace($time, $cp)
+function calculate_pace($time, $cp)
 {
+  // special case
   if($cp == 's') {
     return 'N/A';
   } else if($cp == 'f') {
@@ -20,10 +21,13 @@ function calculatePace($time, $cp)
   } else {
     $distance = (int)$cp * 10;
   }
+  // in case of no hour
   $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
+  // split into h/m/s
   sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
   $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
   $pace_seconds = $time_seconds / $distance;
+  // pace in min'sec" per kilometer format
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
@@ -32,14 +36,14 @@ function post_facebook($access_token, $cp, $name, $time)
   global $app_id;
   global $app_secret;
   global $default_graph_version;
-  $pace = calculatePace($time, $cp);
-  // check that we never post it before
+  global $image_base;
   $fb = new Facebook\Facebook([
     'app_id' => $app_id,
     'app_secret' => $app_secret,
     'default_graph_version' => $default_graph_version,
   ]);
 
+  // Get runner identity from token
   $fb->setDefaultAccessToken($access_token);
   try {
     $response = $fb->get('/me');
@@ -48,16 +52,17 @@ function post_facebook($access_token, $cp, $name, $time)
     return 500;
   }
   if($user) {
-    $pace = calculatePace($time, $cp);
-    $image_base = 'https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php';
+    $pace = calculate_pace($time, $cp);
+    // construct post body
     $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
     $image = $image_base . '?' . $image_query;
+    $post_data = array(
+      'url' => $image
+    );
+    // fire a post
     try {
-      $post_data = array(
-        'url' => $image
-      );
-      $apiResponse = $fb->post('/me/photos', $post_data);
-      if(!$apiResponse->isError()) {
+      $api_response = $fb->post('/me/photos', $post_data);
+      if(!$api_response->isError()) {
         return 200;
       }
     } catch (FacebookApiException $e) {
@@ -70,58 +75,69 @@ function post_facebook($access_token, $cp, $name, $time)
   return 500;
 }
 
-$isParent = true;
-$myCount = 0;
-$pidArray = [];
+// main
+$is_parent = true;
+$my_count = 0;
+$pid_array = [];
+// fork children
 for($i = 0; $i != $child_count; $i++) {
   $pid = pcntl_fork();
-  $pidArray[] = $pid;
   if($pid == -1) {
     die('fork failed');
-  } elseif($pid) { //parent
-    echo "fork a child with " . $pid;
-    echo "\n";
-    $isParent = true;
-  } else { //children
-    $isParent = false;
-    $myCount = $i;
+  } elseif($pid) { //I'm the parent
+    $pid_array[] = $pid;
+    echo "fork a child with " . $pid . " \n";
+    $is_parent = true;
+  } else { //I'm a child
+    $is_parent = false;
+    $my_count = $i;
     break;
   }
 }
+
+// connect db
 $m = new MongoClient();
 $db = $m->cmumarathon;
-if($isParent) {
+
+if($is_parent) {
   echo "This is parent process\n";
   $count = 0;
   while(true) {
+    // get 100 most recent request
     if(($docs = $db->runnerrequest->find()->limit(100)) != NULL) {
       foreach($docs as $doc) {
         echo "add doc to child #" . $count . "\n";
-        //TODO check the response?
+        // add to child's queue
         $db->selectCollection("queue" . $count)->insert($doc);
+        // remove from request queue
         $db->runnerrequest->remove(array('_id' => $doc['_id']));
+        // round robbin here
         $count++;
         if($count > $child_count) $count = 0;
       }
     }
+    // do some sleep to avoid spin-lock
     sleep($parent_delay);
   }
-  foreach($pidArray as $pid) {
+  // just in case....
+  foreach($pid_array as $pid) {
     pcntl_waitpid($pid, $status);
     echo "Child "  . $pid . " with status " . $status . "\n";
   }
 } else { // child
-  $myCol = $db->selectCollection("queue" . $myCount);
-  echo "This is child #" . $myCount . "\n";
+  $myCol = $db->selectCollection("queue" . $my_count);
+  echo "This is child #" . $my_count . "\n";
   while(true) {
+    // check my queue
     if(($doc = $myCol->findOne())!= NULL) {
-      // post facebook
+      // got a request, check if it's dubplicated
       if($db->postlog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
-        echo "Child " . $myCount . " post FB bib:" . $doc['bib'] . " cp:" . $doc['cp']. "\n";
+        echo "Child " . $my_count . " post FB bib:" . $doc['bib'] . " cp:" . $doc['cp']. "\n";
+        // post facebook
         $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] );
         if($ret == 200 || $ret == 404) {
           if($ret == 200) {
-            // remove from postlog
+            // post ok, save to  postlog
             $db->postlog->insert($doc);
           }
           // remove from queue
@@ -131,7 +147,8 @@ if($isParent) {
           $myCol->remove(array('_id' => $doc['_id']));
       }
     } else {
+      // take some nap to avoid spin lock
       sleep($child_delay);
-    }
-  }
-}
+    } // if has doc
+  } // while
+} // if child
