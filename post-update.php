@@ -110,11 +110,12 @@ if($type == 'json') {
   <tr><td>BIB:</td><td><input type="text" name="bib" /></td></tr>
   <tr><td>CP:</td><td>
   <select name="cp">
-  <option value="s">Start</option>
-  <option value="1">10k</option>
-  <option value="2">20k</option>
-  <option value="3">30k</option>
-  <option value="f">Finished</option>
+  <option value="s">CPS Start</option>
+  <option value="1">CP1 ห้วยตึงเฒ่า</option>
+  <option value="2">CP2 แยกต้นพยอม</option>
+  <option value="3">CP3 แยกต้นเกว๋น</option>
+  <option value="4">CP4 พืชสวนโลก</option>
+  <option value="f">CPF Finished</option>
   </select></td></tr>
   <tr><td>time:</td><td><input type="text" name="time" /> (time format: HH:MM:SS)</td></tr>
   <tr><td><input type="submit" /></td><td><td></tr>

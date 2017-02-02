@@ -11,27 +11,21 @@ function clean($in)
   return $h;
 }
 
-function calculate_pace($time, $cp)
+function calculate_pace($time, $cp, $type)
 {
-  // special case
-  if($cp == 's') {
-    return 'N/A';
-  } else if($cp == 'f') {
-    $distance = 42.195;
-  } else {
-    $distance = (int)$cp * 10;
-  }
+  global $distance;
+  $dist = $distance[$type][$cp];
   // in case of no hour
   $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
   // split into h/m/s
   sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
   $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-  $pace_seconds = $time_seconds / $distance;
+  $pace_seconds = $time_seconds / $dist;
   // pace in min'sec" per kilometer format
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
-function post_facebook($access_token, $cp, $name, $time, &$api_response) 
+function post_facebook($access_token, $cp, $name, $time, $type, &$api_response) 
 {
   global $app_id;
   global $app_secret;
@@ -52,7 +46,7 @@ function post_facebook($access_token, $cp, $name, $time, &$api_response)
     return 500;
   }
   if($user) {
-    $pace = calculate_pace($time, $cp);
+    $pace = calculate_pace($time, $cp, $type);
     // construct post body
     $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
     $image = $image_base . '?' . $image_query;
@@ -130,17 +124,29 @@ if($is_parent) {
   while(true) {
     // check my queue
     if(($doc = $myCol->findOne())!= NULL) {
+      $bib = $doc['bib'];
+      $cp = $doc['cp'];
+      $runner = $doc['runner'];
+      $time = $doc['time'];
+      $token = $doc['token'];
       // got a request, check if it's dubplicated
-      if($db->postlog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
-        echo "Child " . $my_count . " post FB bib:" . $doc['bib'] . " cp:" . $doc['cp']. "\n";
+      if($db->postlog->count(array('bib' => $bib, 'cp' => $cp)) == 0) {
+        echo "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp. "\n";
         // post facebook
-        $ret = post_facebook($doc['token'], $doc['cp'], $doc['runner'], $doc['time'] , $api_response);
+        if($bib <= $full_max) { //1 <= full <= 1000
+          $type = 'f';
+        } else if($bib = $half_max) { // 1001 <= half <= 3000
+          $type = 'h';
+        } else { // 3001 <= mini <== 9999
+          $type = 'm';
+        }
+        $ret = post_facebook($token, $cp, $runner, $time , $type, $api_response);
         // save response for future use
         $db->fbresponse->insert(array(
-            'bib'=>$doc['bib'],
-            'token'=>$doc['token'],
-            'cp'=>$doc['cp'],
-            'time'=>$doc['time'],
+            'bib'=>$bib,
+            'token'=>$token,
+            'cp'=>$cp,
+            'time'=>$time,
             'response'=>json_decode($api_response->getBody())
         ));
         if($ret == 200 || $ret == 404) {
