@@ -19,10 +19,10 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib)) {
   $db = $m->cmumarathon;
   $collinfo = $db->runnerinfo;
   if(($doc = $db->runnerinfo->find(array('bib' => $bib))) != NULL) {
-    http_respones_code(200);
+    http_response_code(200);
     header('Content-type: text/javascript');
     echo json_encode($doc, JSON_PRETTY_PRINT); 
   }
 } else {
-   http_respones_code(404);
+   http_response_code(404);
 }
