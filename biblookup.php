@@ -14,7 +14,10 @@ function clean($in)
 $bib = $_GET['bib'];
 $pass =$_GET['pass'];
 
-if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib)) {
+// for dev
+header('Access-Control-Allow-Origin: *');  
+
+if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($bib)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
   if(($doc = $db->runnerinfo->findOne(array('bib' => intval($bib)))) != NULL) {
