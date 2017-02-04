@@ -17,12 +17,13 @@ $pass =$_GET['pass'];
 if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
-  $collinfo = $db->runnerinfo;
-  if(($doc = $db->runnerinfo->find(array('bib' => $bib))) != NULL) {
+  if(($doc = $db->runnerinfo->find(array('bib' => intval($bib)))) != NULL) {
     http_response_code(200);
     header('Content-type: text/javascript');
     echo json_encode($doc, JSON_PRETTY_PRINT); 
+  } else {
+    http_response_code(404);
   }
 } else {
-   http_response_code(404);
+   http_response_code(405);
 }
