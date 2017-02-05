@@ -14,6 +14,9 @@ function clean($in)
 function calculate_pace($time, $cp, $type)
 {
   global $distance;
+  if($cp == 's') {
+    return "N/A";
+  }
   $dist = $distance[$type][$cp];
   // in case of no hour
   $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
@@ -69,15 +72,7 @@ function post_facebook($access_token, $cp, $name, $time, $type, &$api_response)
   return 500;
 }
 
-function msyslog($l, $m)
-{
-  syslog($l, "[FBW] " . $m);
-}
-
-// main
-
-// msyslog
-
+//main
 $is_parent = true;
 $my_count = 0;
 $pid_array = [];
@@ -88,7 +83,7 @@ for($i = 0; $i != $child_count; $i++) {
     die('fork failed');
   } elseif($pid) { //I'm the parent
     $pid_array[] = $pid;
-    echo "fork a child with " . $pid;
+    echo "fork a child with " . $pid . "\n";
     $is_parent = true;
   } else { //I'm a child
     $is_parent = false;
@@ -101,18 +96,18 @@ for($i = 0; $i != $child_count; $i++) {
 $m = new MongoClient();
 $db = $m->cmumarathon;
 
-if(!openlog(LOG_USER, LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER)) {
-  echo "Can't open msyslog, send message to console";
+if(!openlog("FBW", LOG_CONS | LOG_PID | LOG_PERROR, LOG_LOCAL7)) {
+  echo "Can't open syslog, send message to console";
 }
 
 if($is_parent) {
-  msyslog(LOG_INFO, "Start parent process");
+  syslog(LOG_INFO, "Start parent process");
   $count = 0;
   while(true) {
     // get 100 most recent request
     if(($docs = $db->runnerrequest->find()->limit(100)) != NULL) {
       foreach($docs as $doc) {
-        msyslog(LOG_INFO, "add doc to child #" . $count);
+        syslog(LOG_INFO, "add doc to child #" . $count);
         // add to child's queue
         $db->selectCollection("queue" . $count)->insert($doc);
         // remove from request queue
@@ -128,11 +123,11 @@ if($is_parent) {
   // just in case....
   foreach($pid_array as $pid) {
     pcntl_waitpid($pid, $status);
-    msyslog(LOG_INFO, "Child "  . $pid . " with status " . $status);
+    syslog(LOG_INFO, "Child "  . $pid . " with status " . $status);
   }
 } else { // child
   $myCol = $db->selectCollection("queue" . $my_count);
-  msyslog(LOG_INFO, "Start child #" . $my_count);
+  syslog(LOG_INFO, "Start child #" . $my_count);
   while(true) {
     // check my queue
     if(($doc = $myCol->findOne())!= NULL) {
@@ -143,7 +138,7 @@ if($is_parent) {
       $token = $doc['token'];
       // got a request, check if it's dubplicated
       if($db->postlog->count(array('bib' => $bib, 'cp' => $cp)) == 0) {
-        msyslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp);
+        syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp);
         // post facebook
         if($bib <= $full_max) { //1 <= full <= 1000
           $type = 'f';
@@ -165,9 +160,9 @@ if($is_parent) {
           if($ret == 200) {
             // post ok, save to  postlog
             $db->postlog->insert($doc);
-            msyslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " successfully");
+            syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " successfully");
           } else {
-            msyslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " got 404");
+            syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " got 404");
           }
           // remove from queue
           $myCol->remove(array('_id' => $doc['_id']));
