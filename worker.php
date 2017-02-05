@@ -96,7 +96,7 @@ for($i = 0; $i != $child_count; $i++) {
 $m = new MongoClient();
 $db = $m->cmumarathon;
 
-if(!openlog("FBW", LOG_CONS | LOG_PID | LOG_PERROR, LOG_LOCAL7)) {
+if(!openlog($syslogid, LOG_CONS | LOG_PID | LOG_PERROR, LOG_LOCAL7)) {
   echo "Can't open syslog, send message to console";
 }
 
