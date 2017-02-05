@@ -77,9 +77,6 @@ function msyslog($l, $m)
 // main
 
 // msyslog
-if(!openlog(LOG_USER, LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER)) {
-  echo "Can't open msyslog, send message to console";
-}
 
 $is_parent = true;
 $my_count = 0;
@@ -91,7 +88,7 @@ for($i = 0; $i != $child_count; $i++) {
     die('fork failed');
   } elseif($pid) { //I'm the parent
     $pid_array[] = $pid;
-    msyslog(LOG_INFO, "fork a child with " . $pid);
+    echo "fork a child with " . $pid;
     $is_parent = true;
   } else { //I'm a child
     $is_parent = false;
@@ -104,6 +101,9 @@ for($i = 0; $i != $child_count; $i++) {
 $m = new MongoClient();
 $db = $m->cmumarathon;
 
+if(!openlog(LOG_USER, LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER)) {
+  echo "Can't open msyslog, send message to console";
+}
 
 if($is_parent) {
   msyslog(LOG_INFO, "Start parent process");
