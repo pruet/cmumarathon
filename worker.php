@@ -94,7 +94,7 @@ $m = new MongoClient();
 $db = $m->cmumarathon;
 
 // syslog
-if(!openlog($syslogid, LOG_CONS | LOG_PID | LOG_ERROR, LOG_USER)) {
+if(!openlog($syslogid, LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER)) {
   echo "Can't open syslog, send message to console";
 }
 
