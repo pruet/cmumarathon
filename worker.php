@@ -105,7 +105,9 @@ if($is_parent) {
   $count = 0;
   while(true) {
     // get 100 most recent request
-    if(($docs = $db->runnerrequest->find()->limit(100)) != NULL) {
+    $docs = $db->runnerrequest->find()->limit(1000);
+    $num = $docs->count();
+    if($num > 0) {
       foreach($docs as $doc) {
         syslog(LOG_INFO, "add doc to child #" . $count);
         // add to child's queue
@@ -118,6 +120,7 @@ if($is_parent) {
       }
     }
     // do some sleep to avoid spin-lock
+    syslog(LOG_INFO, "running at " . ($num/$parent_delay) + " rps" );
     sleep($parent_delay);
   }
   // just in case....
