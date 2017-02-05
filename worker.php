@@ -93,14 +93,19 @@ for($i = 0; $i != $child_count; $i++) {
 $m = new MongoClient();
 $db = $m->cmumarathon;
 
+// syslog
+if(!openlog($syslogid, LOG_CONS | LOG_PID | LOG_ERROR, LOG_USER)) {
+  echo "Can't open syslog, send message to console";
+}
+
 if($is_parent) {
-  echo "This is parent process\n";
+  syslog(LOG_INFO, "Start parent process");
   $count = 0;
   while(true) {
     // get 100 most recent request
     if(($docs = $db->runnerrequest->find()->limit(100)) != NULL) {
       foreach($docs as $doc) {
-        echo "add doc to child #" . $count . "\n";
+        syslog(LOG_INFO, "add doc to child #" . $count);
         // add to child's queue
         $db->selectCollection("queue" . $count)->insert($doc);
         // remove from request queue
@@ -116,11 +121,11 @@ if($is_parent) {
   // just in case....
   foreach($pid_array as $pid) {
     pcntl_waitpid($pid, $status);
-    echo "Child "  . $pid . " with status " . $status . "\n";
+    syslog(LOG_INFO, "Child "  . $pid . " with status " . $status);
   }
 } else { // child
   $myCol = $db->selectCollection("queue" . $my_count);
-  echo "This is child #" . $my_count . "\n";
+  syslog(LOG_INFO, "Start child #" . $my_count);
   while(true) {
     // check my queue
     if(($doc = $myCol->findOne())!= NULL) {
@@ -131,7 +136,7 @@ if($is_parent) {
       $token = $doc['token'];
       // got a request, check if it's dubplicated
       if($db->postlog->count(array('bib' => $bib, 'cp' => $cp)) == 0) {
-        echo "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp. "\n";
+        syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp);
         // post facebook
         if($bib <= $full_max) { //1 <= full <= 1000
           $type = 'f';
@@ -153,6 +158,9 @@ if($is_parent) {
           if($ret == 200) {
             // post ok, save to  postlog
             $db->postlog->insert($doc);
+            syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " successfully");
+          } else {
+            syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " got 404");
           }
           // remove from queue
           $myCol->remove(array('_id' => $doc['_id']));
