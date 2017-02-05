@@ -9,11 +9,12 @@
   $bib = clean($_POST['bib']);
   $runner = clean($_POST['runner']);
   $fbsession = clean($_POST['fbsession']);
-  $locationStart = $_POST['locationStart'];
-  $location10k = $_POST['location10k'];
-  $location20k = $_POST['location20k'];
-  $location30k = $_POST['location30k'];
-  $locationFinish = $_POST['locationFinish'];
+  $locationCS = $_POST['locationCS'];
+  $locationC1 = $_POST['locationC1'];
+  $locationC2 = $_POST['locationC2'];
+  $locationC3 = $_POST['locationC3'];
+  $locationC4 = $_POST['locationC4'];
+  $locationCF = $_POST['locationCF'];
   if(isset($bib) && isset($runner) && isset($fbsession)) {
     $m = new MongoClient();
     $db = $m->cmumarathon;
@@ -26,11 +27,12 @@
                   'bib' => $bib,
                   'runner' => $runner,
                   'fbsession' => $fbsession,
-                  's' => $locationStart,
-                  '1' => $location10k,
-                  '2' => $location20k,
-                  '3' => $location30k,
-                  'f' => $locationFinish,
+                  's' => $locationCS,
+                  '1' => $locationC1,
+                  '2' => $locationC2,
+                  '3' => $locationC3,
+                  '4' => $locationC4,
+                  'f' => $locationCF,
                   );
       $ret = $coll->insert($document);
       if(isset($ret) && isset($ret["err"]) && $ret["err"] != NULL) {

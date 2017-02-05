@@ -166,11 +166,11 @@ if (isset($accessToken)) {
            </div>
           <div class="panel-body">
             <div class="checkbox">
-              <label id="lcs"><input id="locationCS" type="checkbox" name="locationCS" checked />When I'm at the starting point</label><br />
-              <label id="lc1"><input id="locationC1" type="checkbox" name="locationC1" checked />When I pass Huay Tueng Tao</label><br />
-              <label id="lc2"><input id="locationC2" type="checkbox" name="locationC2" checked />When I pass Ton Payom market</label><br />
-              <label id="lc3"><input id="locationC3" type="checkbox" name="locationC3" checked />When I pass Ton Kwen Junction</label><br />
-              <label id="lc4"><input id="locationC4" type="checkbox" name="locationC4" checked />When I pass Royal Flora Ratchapruk Park</label><br />
+              <label id="lcs"><input id="locationCS" type="checkbox" name="locationCS" checked />When I'm at the start line</label><br />
+              <label id="lc1"><input id="locationC1" type="checkbox" name="locationC1" checked />When I pass CP1</label><br />
+              <label id="lc2"><input id="locationC2" type="checkbox" name="locationC2" checked />When I pass CP2</label><br />
+              <label id="lc3"><input id="locationC3" type="checkbox" name="locationC3" checked />When I pass CP3</label><br />
+              <label id="lc4"><input id="locationC4" type="checkbox" name="locationC4" checked />When I pass CP4</label><br />
               <label id="lcf"><input id="locationCF" type="checkbox" name="locationCF" checked />When I pass the finish line</label><br />
               <button type="button" id="locationAll" class="btn btn-default" onClick="checkAll()">Check all</button>
               <button type="button" id="locationClear" class="btn btn-default" onClick="checkNone()">Clear all</button>
