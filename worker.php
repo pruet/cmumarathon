@@ -120,7 +120,7 @@ if($is_parent) {
       }
     }
     // do some sleep to avoid spin-lock
-    syslog(LOG_INFO, "running at " . ($num/$parent_delay) + " rps" );
+    syslog(LOG_INFO, "running at " . ($num/$parent_delay) . " rps" );
     sleep($parent_delay);
   }
   // just in case....
