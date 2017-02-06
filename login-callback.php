@@ -88,16 +88,35 @@ if (isset($accessToken)) {
             }
             content = content + "<br /><strong>If the above information is correct, please proceed to the next step"
             $('#bibsuccess').html(content); 
+            $('#bibalert').collapse('hide'); 
             $('#panelName').collapse('show'); 
             $('#panelMarker').collapse('show'); 
             $('#panelSubmit').collapse('show'); 
           }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
             $('#bibalert').collapse('show'); 
-            $('#bibalert').collapse('hide'); 
             $('#bibsuccess').collapse('hide'); 
             $('#panelName').collapse('hide'); 
             $('#panelMarker').collapse('hide'); 
             $('#panelSubmit').collapse('hide'); 
+          });
+        }
+      });
+      $('#bibsearch').click(function(){
+        var txt = $('#searchtxt').val();
+        if(txt != undefined && txt != null && txt != "") {
+          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/bibfinder.php?txt='.concat(txt).concat('&pass=hohohohomerryxmas');
+          var jqxhr = $.getJSON(query, function(data) {
+          }).done(function(data) {
+            var content = "";
+            for (var i in data) {
+              content = content + "<div class=\"panel panel-default\"><div class=\"panel-heading\"><strong>First Name</strong> " + data[i].fname + " <strong>Last name</strong> " + data[i].lname + "</div><div class=\"panel-body\"><strong>Bib number</strong> " + data[i].bib + "</div></div>";
+            }
+            $('#searchsuccess').html(content); 
+            $('#searchsuccess').collapse('show'); 
+            $('#searchalert').collapse('hide'); 
+          }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            $('#searchalert').collapse('show'); 
+            $('#searchsuccess').collapse('hide'); 
           });
         }
       });
@@ -122,8 +141,33 @@ if (isset($accessToken)) {
       <div class="container" >
     <h1>CMU Marathon Runner Tracker Facebook App</h1>
     <p class="lead">
-      Please provide your bib number, name and when you want to publish your progress. The name will be shown on the badge posted on your Facebook wall. If you have already provided the information, you are all set, please close this browser window and see you on the race day!.
+      Please provide your bib number, name and when you want to publish your progress. The name will be shown on the badge posted on your Facebook wall. If you have already provided the information, you are all set, please close this browser window and see you on the race day!. If you don't know your bib number, you can <button type="button" class="btn btn-info" data-toggle="modal" data-target="#bibModal">search for it</button>
     </p>
+    <div class="modal fade" id="bibModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Search for a bib</h4>
+          </div>
+          <div class="modal-body">
+            <form method="get" id="bibsearchform" action="#">
+              <p>
+              <input type="text" name="searchtxt" id="searchtxt" class="form-control" required placeholder="Please provide your first name, last name, Thai citizen ID or your passport ID" />
+              <input type="button" value="Search" id="bibsearch"/>
+              </p>
+              <p>
+              <div class="alert alert-danger collapse" role="alert" id="searchalert">Bib not found</div>
+              <div class="alert alert-success collapse" role="alert" id="searchsuccess"></div>
+              </p>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 <form method="post" id="runnerform" action="/runnertracker/register.php">
   <input type="hidden" name="fbsession" value="<?php echo (string)$longLivedAccessToken ?>" />
    <div class="row">
@@ -139,7 +183,7 @@ if (isset($accessToken)) {
               </p>
               <p>
               <div class="alert alert-danger collapse" role="alert" id="bibalert">Bib not found</div>
-              <div class="alert alert-success collapse" role="alert" id="bibsuccess">
+              <div class="alert alert-success collapse" role="alert" id="bibsuccess"></div>
               </div>
               </p>
             </div>

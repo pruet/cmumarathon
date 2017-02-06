@@ -15,7 +15,7 @@ $bib = $_GET['bib'];
 $pass =$_GET['pass'];
 
 // for dev
-//header('Access-Control-Allow-Origin: *');  
+header('Access-Control-Allow-Origin: *');  
 
 if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($bib)) {
   $m = new MongoClient();
