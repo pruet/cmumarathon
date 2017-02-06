@@ -182,7 +182,6 @@ if (isset($accessToken)) {
               <p>
               <div class="alert alert-danger collapse" role="alert" id="bibalert">Bib not found</div>
               <div class="alert alert-success collapse" role="alert" id="bibsuccess"></div>
-              </div>
               </p>
             </div>
           </div>
