@@ -151,7 +151,6 @@ if (isset($accessToken)) {
             <h4 class="modal-title">Search for a bib</h4>
           </div>
           <div class="modal-body">
-            <form method="get" id="bibsearchform" action="#">
               <p>
               <input type="text" name="searchtxt" id="searchtxt" class="form-control" required placeholder="Please provide your first name, last name, Thai citizen ID or your passport ID" />
               <input type="button" value="Search" id="bibsearch"/>
@@ -160,7 +159,6 @@ if (isset($accessToken)) {
               <div class="alert alert-danger collapse" role="alert" id="searchalert">Bib not found</div>
               <div class="alert alert-success collapse" role="alert" id="searchsuccess"></div>
               </p>
-            </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
