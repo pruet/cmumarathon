@@ -135,7 +135,7 @@ if (isset($accessToken)) {
             <div class="panel-body">
               <p>
               <input type="text" maxlength="4" name="bib" id="bib" class="form-control" required placeholder="Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234." />
-              <input type="button" value="Look up" id="biblookup"/>
+              <input type="button" value="Check bib" id="biblookup"/>
               </p>
               <p>
               <div class="alert alert-danger collapse" role="alert" id="bibalert">Bib not found</div>
