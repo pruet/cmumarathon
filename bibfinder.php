@@ -41,6 +41,10 @@ if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($txt)) {
     ) 
   );
   if(($doc = $db->runnerinfo->find($searchQuery)) != NULL) {
+    if($doc->count() == 0) {
+      http_response_code(404);
+      return;
+    }
     http_response_code(200);
     header('Content-type: text/javascript, charset=utf-8');
     echo json_encode(iterator_to_array($doc), JSON_PRETTY_PRINT); 

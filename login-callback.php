@@ -156,7 +156,7 @@ if (isset($accessToken)) {
               <input type="button" value="Search" id="bibsearch"/>
               </p>
               <p>
-              <div class="alert alert-danger collapse" role="alert" id="searchalert">Bib not found</div>
+              <div class="alert alert-danger collapse" role="alert" id="searchalert">Runner not found</div>
               <div class="alert alert-success collapse" role="alert" id="searchsuccess"></div>
               </p>
           </div>

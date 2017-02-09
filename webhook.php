@@ -56,7 +56,7 @@ if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && i
   $query = array('bib' => $bib, $cp => 'on');
   if(($doc = $db->runnertracker->findOne(array('bib' => $bib, $cp => 'on'))) != NULL) {
     // check that we never post it before
-    if($db->postlog->count(array('bib' => $bib, 'cp'=> $cp)) == 0) {
+    if($db->postlog->findOne(array('bib' => $bib, 'cp'=> $cp)) == NULL) {
       $query = array(
         'bib' => $bib,
         'cp' => $cp,
