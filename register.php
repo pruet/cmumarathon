@@ -9,6 +9,7 @@
   $bib = clean($_POST['bib']);
   $runner = clean($_POST['runner']);
   $fbsession = clean($_POST['fbsession']);
+  $fbid = clean($_POST['fbid']);
   $locationCS = $_POST['locationCS'];
   $locationC1 = $_POST['locationC1'];
   $locationC2 = $_POST['locationC2'];
@@ -27,6 +28,7 @@
                   'bib' => $bib,
                   'runner' => $runner,
                   'fbsession' => $fbsession,
+                  'fbid' => $fbid,
                   's' => $locationCS,
                   '1' => $locationC1,
                   '2' => $locationC2,

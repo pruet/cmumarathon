@@ -24,6 +24,12 @@ if (isset($accessToken)) {
   $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
   // Now you can redirect to another page and use the
   // access token from $_SESSION['facebook_access_token']
+  try {
+    $response = $fb->get('/me?fields=id,name', $accessToken);
+    $user = $response->getGraphUser();
+  } catch(Facebook\Exceptions\FacebookSDKException $e) {
+    $user = array("name" => "none", "id" => "none");
+  }
 } else if($debug != 'true') {
   // sned back to login
   header('Location: https://cmumarathon.com/fblogin.html');
@@ -168,6 +174,7 @@ if (isset($accessToken)) {
     </div>
 <form method="post" id="runnerform" action="/runnertracker/register.php">
   <input type="hidden" name="fbsession" value="<?php echo (string)$longLivedAccessToken ?>" />
+  <input type="hidden" name="fbid" value="<?php echo (string)$user['id'] ?>" />
    <div class="row">
         <div class="col-sm-8">
           <div class="panel panel-primary">
