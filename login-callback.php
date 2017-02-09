@@ -120,7 +120,7 @@ if (isset($accessToken)) {
           });
         }
       });
-      $('#runnername').change(function(){
+      $('#runnername').on('change keyup keypress', function(){
         var runnernanme = $('#runnername').val();
         if(runnername != "") {
            $(':input[type="submit"]').prop('disabled', false);
