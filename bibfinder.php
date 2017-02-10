@@ -30,12 +30,6 @@ if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($txt)) {
         'lname' => new MongoRegex("/$txt/i"),
       ),
       array(
-        'tfname' => new MongoRegex("/$txt/i"),
-      ),
-      array(
-        'flname' => new MongoRegex("/$txt/i"),
-      ),
-      array(
         'id' => new MongoRegex("/$txt/i"),
       )
     ) 
@@ -46,8 +40,15 @@ if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($txt)) {
       return;
     }
     http_response_code(200);
+    $adoc = array();
+    foreach($doc as $d) {
+      $adoc[$d["_id"]->{'$id'}]['type'] = $d['type'];
+      $adoc[$d["_id"]->{'$id'}]['fname'] = $d['fname'];
+      $adoc[$d["_id"]->{'$id'}]['lname'] = $d['lname'];
+      $adoc[$d["_id"]->{'$id'}]['bib'] = $d['bib'];
+    }
     header('Content-type: text/javascript, charset=utf-8');
-    echo json_encode(iterator_to_array($doc), JSON_PRETTY_PRINT); 
+    echo json_encode(iterator_to_array($adoc), JSON_PRETTY_PRINT); 
     return;
   } else {
     http_response_code(404);

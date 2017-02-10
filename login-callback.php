@@ -115,7 +115,15 @@ if (isset($accessToken)) {
           }).done(function(data) {
             var content = "";
             for (var i in data) {
-              content = content + "<div class=\"panel panel-default\"><div class=\"panel-heading\"><strong>First Name</strong> " + data[i].fname + " <strong>Last name</strong> " + data[i].lname + "</div><div class=\"panel-body\"><strong>Bib number</strong> " + data[i].bib + "</div></div>";
+              var bib = String(data[i].bib);
+              if(bib.length == 1) {
+                bib = "000".concat(bib);
+              } else if(bib.length == 2) {
+                bib = "00".concat(bib);
+              } else if(bib.length == 3) {
+                bib = "0".concat(bib);
+              }
+              content = content + "<div class=\"panel panel-default\"><div class=\"panel-heading\"><strong>First Name</strong> " + data[i].fname + " <strong>Last name</strong> " + data[i].lname + "</div><div class=\"panel-body\"><strong>Bib number</strong> " + bib + "</div></div>";
             }
             $('#searchsuccess').html(content); 
             $('#searchsuccess').collapse('show'); 
