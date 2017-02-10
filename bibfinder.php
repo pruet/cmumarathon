@@ -48,7 +48,7 @@ if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($txt)) {
       $adoc[$d["_id"]->{'$id'}]['bib'] = $d['bib'];
     }
     header('Content-type: text/javascript, charset=utf-8');
-    echo json_encode(iterator_to_array($adoc), JSON_PRETTY_PRINT); 
+    echo json_encode($adoc, JSON_PRETTY_PRINT); 
     return;
   } else {
     http_response_code(404);
