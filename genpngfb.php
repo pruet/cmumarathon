@@ -24,7 +24,7 @@ if(isset($bib)) {
   imagefttext($im, 60, 0, 290, 530, $white, $font, $name);
   imagefttext($im, 60, 0, 190, 640, $white, $font, $time);
   imagefttext($im, 55, 0, 260, 720, $black, $font, $gender);
-  imagefttext($im, 55, 0, 680, 720, $black, $font, $contry);
+  imagefttext($im, 55, 0, 680, 720, $black, $font, $country);
   imagefttext($im, 55, 0, 190, 800, $black, $font, $type);
   imagefttext($im, 55, 0, 715, 800, $black, $font, $rank);
   imagefttext($im, 55, 0, 330, 880, $black, $font, $genrank);
