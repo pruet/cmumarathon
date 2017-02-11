@@ -1,8 +1,4 @@
 <?php
-
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config.php';
-
 $bib = strval($_GET["bib"]);
 $base_image = 'images/badge-fb.png';
 $font = './niramit.ttf';
@@ -23,12 +19,12 @@ if(isset($bib)) {
   $black = imagecolorallocate($im, 0x00, 0x00, 0x00);
   imagefttext($im, 60, 0, 290, 530, $white, $font, $name);
   imagefttext($im, 60, 0, 190, 640, $white, $font, $time);
-  imagefttext($im, 55, 0, 260, 720, $black, $font, $gender);
-  imagefttext($im, 55, 0, 680, 720, $black, $font, $country);
-  imagefttext($im, 55, 0, 190, 800, $black, $font, $type);
-  imagefttext($im, 55, 0, 715, 800, $black, $font, $rank);
-  imagefttext($im, 55, 0, 330, 880, $black, $font, $genrank);
-  imagefttext($im, 55, 0, 715, 960, $black, $font, $catrank);
+  imagefttext($im, 55, 0, 260, 760, $black, $font, $gender);
+  imagefttext($im, 55, 0, 680, 760, $black, $font, $country);
+  imagefttext($im, 55, 0, 190, 840, $black, $font, $type);
+  imagefttext($im, 55, 0, 615, 840, $black, $font, $rank);
+  imagefttext($im, 55, 0, 330, 925, $black, $font, $genrank);
+  imagefttext($im, 55, 0, 315, 1005, $black, $font, $catrank);
   header('Content-Type: image/png');
   imagepng($im);
   imagedestroy($im);
