@@ -9,7 +9,7 @@ $font = './niramit.ttf';
 
 if(isset($bib)) {
   $json = file_get_contents('https://marathon.eng.cmu.ac.th/AllResult/getRunnerInfo/?id=' . $bib);
-  $ri = json_decode($json);
+  $ri = json_decode($json, true);
   $gender = ($ri['Sex']==1)?"Male":"Female";
   $country = $ri['Nation'];
   $type = $ri['Type'];
