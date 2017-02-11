@@ -1,21 +1,12 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config.php';
-
-function clean($in)
-{
-  return $in;
-  $t = trim($in);
-  $s = strip_tags($t);
-  $h = htmlspecialchars($s);
-  return $h;
-}
+//require_once __DIR__ . '/vendor/autoload.php';
+//require_once __DIR__ . '/config.php';
 
 $bib = intval($_GET['bib']);
 $pass =$_GET['pass'];
 
 // for dev
-header('Access-Control-Allow-Origin: *');  
+//header('Access-Control-Allow-Origin: *');  
 
 if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($bib)) {
   $m = new MongoClient();

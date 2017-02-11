@@ -3,7 +3,7 @@
 $bib = strval($_GET['bib']);
 
 // for dev
-header('Access-Control-Allow-Origin: *');
+//header('Access-Control-Allow-Origin: *');
 
 if(isset($bib)) {
   ?>
