@@ -13,17 +13,20 @@ function clean($in)
   return $h;
 }
 
-$bib = intval($_GET['bib']);
+$bib = strval($_GET['bib']);
 
 // for dev
 header('Access-Control-Allow-Origin: *');  
 
 if(isset($bib)) {
-  $m = new MongoClient();
-  $db = $m->cmumarathon;
   ?>
-    <img src="https://runnerapi.eng.cmu.ac.th/runnertracker/genpng.php?name=test&time=1:2:3&pace=1%272%22&cp=3" />
-  <?
+    <head>
+  <meta property="og:title" content="CMU Marathon 2017 Unofficial Result" />
+  <meta property="og:image" content="https://runnerapi.eng.cmu.ac.th/runnertracker/genpngfb.php?bib="<?php echo $bib ?> />
+</head>
+<body>
+    <img src="https://runnerapi.eng.cmu.ac.th/runnertracker/genpngfb.php?bib=<?php echo $bib ?>" alt="CMU Marathon 2017 Unofficial Result" width=900 height=1200 title="test" />
+  <?php
 }
 
 ?>
