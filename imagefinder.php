@@ -18,7 +18,7 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
     }
     http_response_code(200);
     header('Content-type: text/javascript, charset=utf-8');
-    echo json_encode(iterator_to_array($adoc), JSON_PRETTY_PRINT); 
+    echo json_encode(iterator_to_array($doc), JSON_PRETTY_PRINT); 
     return;
   } else {
     // no bib
