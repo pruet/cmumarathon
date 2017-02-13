@@ -38,17 +38,21 @@ function post_facebook($access_token, $cp, $name, $time, $type, &$api_response)
     'app_id' => $app_id,
     'app_secret' => $app_secret,
     'default_graph_version' => $default_graph_version,
+          'permissions' => array(
+      'email',
+            'publish_actions',
+                )
   ]);
 
   // Get runner identity from token
-  $fb->setDefaultAccessToken($access_token);
-  try {
+  //$fb->setDefaultAccessToken($access_token);
+  /*try {
     $response = $fb->get('/me');
     $user = $response->getGraphUser();
   } catch (FacebookResponseException $e) {
     return 500;
-  }
-  if($user) {
+  }*/
+  //if($user) {
     $pace = calculate_pace($time, $cp, $type);
     // construct post body
     $image_query = 'cp=' . urlencode($cp) . '&name=' . urlencode($name) . '&time=' . urlencode($time) . '&pace=' . urlencode($pace);
@@ -58,17 +62,23 @@ function post_facebook($access_token, $cp, $name, $time, $type, &$api_response)
     );
     // fire a post
     try {
-      $api_response = $fb->post('/me/photos', $post_data);
+      $api_response = $fb->post('/me/photos', $post_data, $access_token);
       if(!$api_response->isError()) {
         return 200;
       }
-    } catch (FacebookApiException $e) {
+     } catch(Facebook\Exceptions\FacebookResponseException $e) {
+       echo 'Graph returned an error: ' . $e->getMessage();
+       return 500;
+         } catch(Facebook\Exceptions\FacebookSDKException $e) {
+         return 500;
+           echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    } catch (FacebookResponseException $e) {
       $user = null;
       return 500;
     }
-  } else {
-    return 404;
-  }
+  //} else {
+   // return 404;
+  //}
   return 500;
 }
 
@@ -109,9 +119,12 @@ if($is_parent) {
     $num = $docs->count();
     if($num > 0) {
       foreach($docs as $doc) {
-        syslog(LOG_INFO, "add doc to child #" . $count);
         // add to child's queue
-        $db->selectCollection("queue" . $count)->insert($doc);
+        syslog(LOG_INFO, "add doc to child #" . $count);
+        if($db->checklog->count(array('bib' => $doc['bib'], 'cp' => $doc['cp'])) == 0) {
+          $db->selectCollection("queue" . $count)->insert($doc);
+          $db->checklog->insert($doc);
+        }
         // remove from request queue
         $db->runnerrequest->remove(array('_id' => $doc['_id']));
         // round robbin here
@@ -141,17 +154,34 @@ if($is_parent) {
       $token = $doc['token'];
       // got a request, check if it's dubplicated
       if($db->postlog->count(array('bib' => $bib, 'cp' => $cp)) == 0) {
-        syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp);
         // post facebook
+        $times = explode(":", $time);
+        $flag = true;
         if($bib <= $full_max) { //1 <= full <= 1000
           $type = 'f';
-        } else if($bib = $half_max) { // 1001 <= half <= 3000
+          $hr = intval($times[0]) - 3;
+          if($hr < 0) $flag = false;
+          $time = strval($hr) . ":" . $times[1] . ":" . $times[2];
+        } else if($bib <= $half_max) { // 1001 <= half <= 3000
           $type = 'h';
+          $hr = intval($times[0]) - 5;
+          if($hr < 0) $flag = false;
+          $time = strval($hr) . ":" . $times[1] . ":" . $times[2];
         } else { // 3001 <= mini <== 9999
           $type = 'm';
+          $hr = intval($times[0]) - 6;
+          if($hr < 0) $flag = false;
+          $time = strval($hr) . ":" . $times[1] . ":" . $times[2];
         }
+        if($flag) {
+        syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " time: " . $time);
         $ret = post_facebook($token, $cp, $runner, $time , $type, $api_response);
+        } else {
+        echo $hr  . "no\n";
+        $ret = 500;
+        }
         // save response for future use
+        if($ret == 200 || $ret == 404) {
         $db->fbresponse->insert(array(
             'bib'=>$bib,
             'token'=>$token,
@@ -159,15 +189,18 @@ if($is_parent) {
             'time'=>$time,
             'response'=>json_decode($api_response->getBody())
         ));
-        if($ret == 200 || $ret == 404) {
           if($ret == 200) {
             // post ok, save to  postlog
-            $db->postlog->insert($doc);
-            syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " successfully");
+            syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " time: " . $time . " successfully");
           } else {
             syslog(LOG_INFO, "Child " . $my_count . " post FB bib:" . $bib . " cp:" . $cp . " got 404");
           }
           // remove from queue
+          $myCol->remove(array('_id' => $doc['_id']));
+            $db->postlog->insert($doc);
+        } else {
+            $db->badlog->insert($doc);
+            $db->postlog->insert($doc);
           $myCol->remove(array('_id' => $doc['_id']));
         }
       } else {

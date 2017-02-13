@@ -27,19 +27,42 @@ function calculatePace($time, $cp)
   return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
 }
 
+function str_starts_with($haystack, $needle)
+{
+  return strpos($haystack, $needle) === 0;
+}
+
 if(!session_id()) {
   session_start();
+}
+if(!openlog($syslogid, LOG_CONS | LOG_PID | LOG_PERROR, LOG_LOCAL7)) {
+  echo "Can't open syslog, send message to console";
 }
 
 // Check request type
 $type = clean($_GET["type"]);
 if($type == 'json') {
   $json = file_get_contents('php://input');
+  if(!str_starts_with($json, "{")) {
+    $items = explode("&", $json);
+    $out = "{";
+    foreach($items as $item) {
+      $it = explode("=", $item);
+      if($it[0] == "bib") {
+        $it[1] = substr($it[1], 5);
+      }
+      $out = $out . '"' . $it[0] . '":"' . $it[1] . '",';
+
+    }
+    $json = $out . '"x":"y"}';
+  }
+  syslog(LOG_INFO, "|" . strval($json) . "|");
   $js = json_decode($json);
-  $bib = clean($js->bib);
-  $cp = clean($js->cp);
-  $time = clean($js->time);
-  $pass = clean($js->tk);
+  
+  $bib = clean($js->{'bib'});
+  $cp = clean($js->{'cp'});
+  $time = clean($js->{'time'});
+  $pass = clean($js->{'tk'});
 } else {
   $bib = clean($_POST["bib"]);
   $cp = clean($_POST["cp"]);
