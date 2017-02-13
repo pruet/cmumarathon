@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CMU Marathon Runner's Image Searcher</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Search page for CMU Marathon Runner's Images">
+  <meta name="keywords" content="CMU, Marathon, Images, Search">
+  <meta name="author" content="CMU Marathon Technical Team">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="jquery.redirect.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="starter-template.css" rel="stylesheet">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<script>
+    $(document).ready(function(){
+      $('#bibsearch').click(function(){
+        var bib = $('#bib').val();
+        if(bib != undefined && bib != null && bib != "") {
+          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php?bib='.concat(bib).concat('&pass=idontlikepopmusic');
+          var jqxhr = $.getJSON(query, function(data) {
+          }).done(function(data) {
+            var content = '<div class="container">';
+            var count = 0;
+            for (var i in data) {
+              if (count == 0) {
+                content = content + '<div class="row">';
+              }
+              content = content + '<div class="col col-sm-3"><div class="thumbnail"><a href="' + data[i].href + '" target="_blank"><img class="img-responsive" src="' + data[i].url + '" /></a><div class="caption">By: ' + data[i].photographer + '</div></div></div>';
+              count++;
+              // if you cange count, you have to change col-sm-x to match 12 grid
+              if(count == 4) count = 0;
+              if(count == 0)  {
+                content = content + '</div>';
+              }
+            }
+            $('#searchresult').html(content); 
+            content = content + '</div></div>';
+          }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            $('#bibalert').collapse('show'); 
+            $('#searchresult').collapse('hide'); 
+          });
+        }
+      });
+    });
+</script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">CMU Marathon Runner's Images Searcher</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="jumbotron" id="home">
+      <div class="container" >
+        <h1>Welcome to CMU Marathon Runner's Images Searcher</h1>
+        <p>
+          This Facebook application is an official application of CMU Marathon 2017. This application allows runners to find their images from the event day.
+          </p>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h1 class="panel-title" class="control-label">Please provide your bib number</h1>
+            </div>
+            <div class="panel-body">
+              <p>
+              <input type="text" maxlength="4" name="bib" id="bib" class="form-control" required placeholder="Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234." />
+              <input type="button" value="Search" id="bibsearch"/>
+              </p>
+              <p>
+              <div class="alert alert-danger collapse" role="alert" id="bibalert">Bib not found</div>
+              <div class="alert alert-success collapse" role="alert" id="bibsuccess"></div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="searchresult" />
+      </div>
+    </div><!-- /.container -->
+    </div><!-- /.jumobotron -->
+
+
+</body>
+</html>
