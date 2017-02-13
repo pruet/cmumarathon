@@ -75,7 +75,7 @@ if (isset($accessToken)) {
       $('#biblookup').click(function(){
         var bib = $('#bib').val();
         if(bib != undefined && bib != null && bib != "") {
-          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/biblookup.php?bib='.concat(bib).concat('&pass=hohohohomerryxmas');
+          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/biblookup.php?bib='.concat(bib).concat('&pass=<?php echo $bibfinder_pass ?>');
           var jqxhr = $.getJSON(query, function(data) {
           }).done(function(data) {
             $('#bibsuccess').collapse('show'); 
@@ -110,7 +110,7 @@ if (isset($accessToken)) {
       $('#bibsearch').click(function(){
         var txt = $('#searchtxt').val();
         if(txt != undefined && txt != null && txt != "") {
-          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/bibfinder.php?txt='.concat(txt).concat('&pass=hohohohomerryxmas');
+          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/bibfinder.php?txt='.concat(txt).concat('&pass=<?php echo $bibfinder_pass ?>');
           var jqxhr = $.getJSON(query, function(data) {
           }).done(function(data) {
             var content = "";

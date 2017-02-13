@@ -8,7 +8,7 @@ $pass =$_GET['pass'];
 // for dev
 //header('Access-Control-Allow-Origin: *');  
 
-if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($bib)) {
+if(isset($pass) && ($pass == $bibfinder_pass) && isset($bib)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
   if(($doc = $db->runnerinfo->findOne(array('bib' => intval($bib)))) != NULL) {

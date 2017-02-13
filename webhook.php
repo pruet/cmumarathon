@@ -30,18 +30,23 @@ if($type == 'json') {
     $json = $out . '"x":"y"}';
   }
   // end hack
-  syslog(LOG_INFO, "|" . strval($json) . "|");
-  $js = json_decode($json);
-  
-  $bib = $js->{'bib'};
-  $cp = $js->{'cp'};
-  $time = $js->{'time'};
-  $pass = $js->{'tk'};
+  try {
+    $js = json_decode($json);
+    
+    $bib = $js->{'bib'};
+    $cp = $js->{'cp'};
+    $time = $js->{'time'};
+    $pass = $js->{'tk'};
+
+  } catch (Exception $e) {
+    syslog(LOG_INFO, 'Error:' . $e->getMessage() . '\n');
+    return;
+  }
 } else {
-  $bib = clean($_POST["bib"]);
-  $cp = clean($_POST["cp"]);
-  $time = clean($_POST["time"]);
-  $pass = clean($_POST["tk"]);
+  $bib = $_POST["bib"];
+  $cp = $_POST["cp"];
+  $time = $_POST["time"];
+  $pass = $_POST["tk"];
 }
 
 // Check parameters

@@ -1,8 +1,9 @@
 <?php
+require_once __DIR__ . '/config.php';
 
 $pass =$_GET['pass'];
 
-if(isset($pass) && ($pass == 'hohohohomerryxmas')) {
+if(isset($pass) && ($pass == $bibfinder_pass)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
   echo "<br />registered: " . $db->runnertracker->count();

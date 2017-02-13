@@ -17,7 +17,7 @@ $pass =$_GET['pass'];
 // for dev
 //header('Access-Control-Allow-Origin: *');  
 
-if(isset($pass) && ($pass == 'hohohohomerryxmas') && isset($txt)) {
+if(isset($pass) && ($pass == $bibfinder_pass) && isset($txt)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
   $regex = new MongoRegex("/" . $txt . "/i");
