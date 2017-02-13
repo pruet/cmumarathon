@@ -9,6 +9,12 @@ if(isset($bib)) {
   $gender = ($ri['Sex']==1)?"Male":"Female";
   $country = $ri['Nation'];
   $type = $ri['Type'];
+  if($type == "Half Marathon") {
+    $type = "Half";
+  }
+  if($type == "Mini Marathon") {
+    $type = "Mini";
+  }
   $rank = $ri['PlaceAll'];
   $genrank = $ri['place_by_gender'];
   $catrank = $ri['PlaceCat'];
