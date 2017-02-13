@@ -1,68 +1,42 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
-
-function clean($in)
-{
-  return $in;
-  $t = trim($in);
-  $s = strip_tags($t);
-  $h = htmlspecialchars($s);
-  return $h;
-}
-
-function calculatePace($time, $cp)
-{
-  if($cp == 's') {
-    return 'N/A';
-  } else if($cp == 'f') {
-    $distance = 42.195;
-  } else {
-    $distance = (int)$cp * 10;
-  }
-  $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
-  sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
-  $time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
-  $pace_seconds = $time_seconds / $distance;
-  return ((int)($pace_seconds / 60)) . "'" . ($pace_seconds % 60) . '"';
-}
-
-function str_starts_with($haystack, $needle)
-{
-  return strpos($haystack, $needle) === 0;
-}
 
 if(!session_id()) {
   session_start();
 }
 if(!openlog($syslogid, LOG_CONS | LOG_PID | LOG_PERROR, LOG_LOCAL7)) {
-  echo "Can't open syslog, send message to console";
+  echo 'Can\'t open syslog, send message to console';
 }
 
 // Check request type
-$type = clean($_GET["type"]);
+$type = $_GET["type"];
 if($type == 'json') {
   $json = file_get_contents('php://input');
-  if(!str_starts_with($json, "{")) {
-    $items = explode("&", $json);
-    $out = "{";
+  // Hack for KKU team sending in URL paramter format bib=xxx&cp==yyy&...
+  // so, we convert it to json
+  // TODO: might need to remove it next time;
+  if(starpos($json, '{') != 0) {
+    $items = explode('&', $json);
+    $out = '{';
     foreach($items as $item) {
-      $it = explode("=", $item);
-      if($it[0] == "bib") {
+      $it = explode('=', $item);
+      if($it[0] == 'bib') {
+        // they send in 20M20xxxx format, we need only xxxx
         $it[1] = substr($it[1], 5);
       }
       $out = $out . '"' . $it[0] . '":"' . $it[1] . '",';
-
     }
+    // lazy padding
     $json = $out . '"x":"y"}';
   }
+  // end hack
   syslog(LOG_INFO, "|" . strval($json) . "|");
   $js = json_decode($json);
   
-  $bib = clean($js->{'bib'});
-  $cp = clean($js->{'cp'});
-  $time = clean($js->{'time'});
-  $pass = clean($js->{'tk'});
+  $bib = $js->{'bib'};
+  $cp = $js->{'cp'};
+  $time = $js->{'time'};
+  $pass = $js->{'tk'};
 } else {
   $bib = clean($_POST["bib"]);
   $cp = clean($_POST["cp"]);
@@ -71,7 +45,7 @@ if($type == 'json') {
 }
 
 // Check parameters
-if(isset($pass) && ($pass == '7uZZs8RwpNnWjP5jHzsDTsA1CQGR') && isset($bib) && isset($cp) && isset($time)) {
+if(isset($pass) && ($pass == $webhook_pass) && isset($bib) && isset($cp) && isset($time)) {
   $m = new MongoClient();
   $db = $m->cmumarathon;
 
