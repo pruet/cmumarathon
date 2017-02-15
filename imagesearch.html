@@ -19,35 +19,96 @@
 </head>
 <body>
 <script>
-    $(document).ready(function(){
-      $('#bibsearch').click(function(){
-        var bib = $('#bib').val();
-        if(bib != undefined && bib != null && bib != "") {
-          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php?bib='.concat(bib).concat('&pass=idontlikepopmusic');
-          var jqxhr = $.getJSON(query, function(data) {
-          }).done(function(data) {
-            var content = '<div class="container">';
-            var count = 0;
-            for (var i in data) {
-              if (count == 0) {
-                content = content + '<div class="row">';
-              }
-              content = content + '<div class="col col-sm-3"><div class="thumbnail"><a href="' + data[i].href + '" target="_blank"><img class="img-responsive" src="' + data[i].url + '" /></a><div class="caption">By: ' + data[i].photographer + '</div></div></div>';
-              count++;
-              // if you cange count, you have to change col-sm-x to match 12 grid
-              if(count == 4) count = 0;
-              if(count == 0)  {
-                content = content + '</div>';
-              }
+    var bib;
+    var iurl;
+    var btnDeleteClick =  function(e){
+      iurl = e.target.id;
+      $('#bibNum').html(bib);
+      $('#bibNumE').html(bib);
+      $('#img-thumbnail').attr('src', iurl);
+      $('#deleteModal').modal('show');
+    }
+    var bibSearchByBib = function (bib){
+      if(bib != undefined && bib != null && bib != "") {
+        var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php?bib='.concat(bib).concat('&pass=idontlikepopmusic');
+        var jqxhr = $.getJSON(query, function(data) {
+        }).done(function(data) {
+          var content = '<div class="container">';
+          var count = 0;
+          for (var i in data) {
+            if (count == 0) {
+              content = content + '<div class="row">';
             }
-            $('#searchresult').html(content); 
-            content = content + '</div></div>';
+            content +='<div class="col col-sm-3">';
+            content += '<div class="thumbnail">';
+            content += '<a href="' + data[i].href + '" target="_blank">';
+            content += '<img class="img-responsive" src="' + data[i].url + '" />';
+
+            content += '</a>';
+            content += '<div class="caption">';
+            content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
+            content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
+            content += '</button>';
+            content += '<button type="button" id="imageedit" class="btn edit-btn btn-default btn-sm" align="right"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></button>';
+            content += '  By: ' + data[i].photographer;
+            content += '</div>';
+            content += '</div></div>';
+            count++;
+            // if you cange count, you have to change col-sm-x to match 12 grid
+            if(count == 4) count = 0;
+            if(count == 0)  {
+              content = content + '</div>';
+            }
+          }
+          content += '</div><script>$(\'.delete-btn\').bind(\'click\', btnDeleteClick)\<\/script>';
+          $('#searchresult').html(content); 
+          $('#searchresult').collapse('show'); 
+          $('#bibalert').collapse('hide'); 
+          content = content + '</div></div>';
+          var myurl = window.location.hostname + window.location.pathname;
+          window.history.pushState("path", $(document).find("title").text(), myurl + "?bib="+ bib) ;
+        }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+          $('#bibalert').collapse('show'); 
+          $('#searchresult').collapse('hide'); 
+        });
+      }
+    }
+    var bibSearch = function(){
+      bib = $('#bib').val();
+      bibSearchByBib(bib);
+    }
+    $(document).ready(function(){
+      $('#confirmDeleteButton').click(function(){
+        if(bib != undefined && bib != null && bib != "" && iurl != undefined && iurl != null && iurl != "") {
+          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php';
+          var pdata = {
+            "bib" : bib,
+            "pass" : "idontlikepopmusic",
+            "url" : iurl,
+            "action" : "delete"
+          };
+          var jqxhr = $.post(query, pdata, function(data) {
+            console.log('post sent');
+            console.log(data);
+          }).done(function(data) {
+            console.log('post done');
+            console.log(data);
           }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-            $('#bibalert').collapse('show'); 
-            $('#searchresult').collapse('hide'); 
+            console.log('post fail');
+            console.log(data);
           });
-        }
+
+          bib = null;
+          iurl = null;
+        } 
       });
+      $('#bibsearch').click(bibSearch);
+      var pa = window.location.href;
+      if(pa.includes('?bib=')) {
+        res = pa.split('?bib=');
+        bib = res[1];
+        bibSearchByBib(bib);
+      }
     });
 </script>
 
@@ -69,18 +130,43 @@
       <div class="container" >
         <h1>Welcome to CMU Marathon Runner's Images Searcher</h1>
         <p>
-          This Facebook application is an official application of CMU Marathon 2017. This application allows runners to find their images from the event day.
+          This application is an official application of CMU Marathon 2017. This application allows runners to find their images from the event day. To search, please input your bib number in the search box below then click at Search button. You can Ctrl-Click (or Cmd-Click) at an image to open the image in a new tab.
           </p>
+          <div class="modal fade" id="deleteModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">ท่านต้องการลบรูปนี้ออกจากรายการรูปตามหมายเลข bib <span id="bibNum"></span> หรือไม่</h4>
+                </div>
+                <div class="modal-body">
+                  <center>
+                  Please confirm that this picture is not belong to bib <span id="bibNumE"></span> and should be removed<br />
+                  <div class="container">
+                  <p><button type="button" id="confirmDeleteButton">ลบ/Remove</button></p>
+                  <br />
+                  <img class="img-responsive" src="" id="img-thumbnail"/>
+                  </div>
+                  </center>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
       <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h1 class="panel-title" class="control-label">Please provide your bib number</h1>
             </div>
             <div class="panel-body">
               <p>
-              <input type="text" maxlength="4" name="bib" id="bib" class="form-control" required placeholder="Only last four digit of your bib, e.g., if your bib is 18M1234, please input only 1234." />
-              <input type="button" value="Search" id="bibsearch"/>
+                Only last four (full/half/mini marathon) or five (funrun) digit of your bib, e.g., if your bib is 18M1234, please input only 1234.
+              <input type="text" maxlength="5" name="bib" id="bib" class="form-control" required placeholder="" />
+              <input type="button" value="Search" id="bibsearch" class="btn btn-default"/>
               </p>
               <p>
               <div class="alert alert-danger collapse" role="alert" id="bibalert">Bib not found</div>
@@ -89,9 +175,11 @@
             </div>
           </div>
         </div>
+        <div class="col-sm-3"></div>
       </div>
-      <div class="row">
-        <div id="searchresult" />
+      <div class="container collapse" id="searchresult">
+      </div>
+      <div class="container" id="listofurl">
       </div>
     </div><!-- /.container -->
     </div><!-- /.jumobotron -->
