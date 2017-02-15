@@ -21,6 +21,12 @@
 <script>
     var bib;
     var iurl;
+    var btnZoomClick =  function(e){
+      iurl = e.target.id;
+      console.log(iurl);
+      $('#img-zoom-thumbnail').attr('src', iurl);
+      $('#zoomModal').modal('show');
+    }
     var btnDeleteClick =  function(e){
       iurl = e.target.id;
       $('#bibNum').html(bib);
@@ -46,10 +52,15 @@
 
             content += '</a>';
             content += '<div class="caption">';
+            content += '<button type="button" id="' + data[i].url + '" class="btn zoom-btn btn-default btn-sm" align="right">';
+            content += '<span class="glyphicon glyphicon-search" id="' + data[i].url + '" aria-hidden="true">';
+            content += '</button>';
             content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
             content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
             content += '</button>';
-            content += '<button type="button" id="imageedit" class="btn edit-btn btn-default btn-sm" align="right"> <span class="glyphicon glyphicon-edit" aria-hidden="true"></button>';
+            //content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
+            //content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
+            //content += '</button>';
             content += '  By: ' + data[i].photographer;
             content += '</div>';
             content += '</div></div>';
@@ -60,7 +71,10 @@
               content = content + '</div>';
             }
           }
-          content += '</div><script>$(\'.delete-btn\').bind(\'click\', btnDeleteClick)\<\/script>';
+          content += '</div><script>';
+          content += '$(\'.delete-btn\').bind(\'click\', btnDeleteClick);';
+          content += '$(\'.zoom-btn\').bind(\'click\', btnZoomClick);';
+          content += '\<\/script>';
           $('#searchresult').html(content); 
           $('#searchresult').collapse('show'); 
           $('#bibalert').collapse('hide'); 
@@ -88,14 +102,10 @@
             "action" : "delete"
           };
           var jqxhr = $.post(query, pdata, function(data) {
-            console.log('post sent');
-            console.log(data);
           }).done(function(data) {
-            console.log('post done');
-            console.log(data);
+            location.reload();
           }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-            console.log('post fail');
-            console.log(data);
+            alert(textStatus);
           });
 
           bib = null;
@@ -132,6 +142,25 @@
         <p>
           This application is an official application of CMU Marathon 2017. This application allows runners to find their images from the event day. To search, please input your bib number in the search box below then click at Search button. You can Ctrl-Click (or Cmd-Click) at an image to open the image in a new tab.
           </p>
+          <div class="modal fade" id="zoomModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <center>
+                  <div class="container">
+                  <img class="img-responsive" src="" id="img-zoom-thumbnail"/>
+                  </div>
+                  </center>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="modal fade" id="deleteModal" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
