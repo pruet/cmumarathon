@@ -38,13 +38,13 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
     } else {
       $bibs = explode(',', $bib);
       $doc = $db->runnerimage->findOne(array('url' => $url, 'bib' => $oldbib));
+      unset($doc['_id']);
       foreach($bibs as $bib) {
         $bib = trim($bib);
-        unset($doc['_id']);
         $doc['bib'] = $bib;
         $db->runnerimage->insert($doc);
       }
-      $db->runnerimage->remove(array('_id' => $doc['id']), true);
+      $db->runnerimage->remove(array('_id' => $doc['id']));
     }
   } else {
   // incorrect pass
