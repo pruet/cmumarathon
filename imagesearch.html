@@ -86,7 +86,7 @@
           $('#searchresult').collapse('show'); 
           $('#bibalert').collapse('hide'); 
           content = content + '</div></div>';
-          var myurl = window.location.hostname + window.location.pathname;
+          var myurl = window.location.protocol + "//" + window.location.hostname + window.location.pathname;
           window.history.pushState("path", $(document).find("title").text(), myurl + "?bib="+ bib) ;
         }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
           $('#bibalert').collapse('show'); 
