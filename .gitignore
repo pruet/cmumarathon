@@ -1,5 +1,7 @@
+.gitignore
 vendor/
 config.php
 *.swp
 *.xcf
 images/temp/
+*.csv
