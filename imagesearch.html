@@ -21,9 +21,15 @@
 <script>
     var bib;
     var iurl;
-    var btnZoomClick =  function(e){
+    var btnEditClick =  function(e){
       iurl = e.target.id;
       console.log(iurl);
+      $('#img-edit-thumbnail').attr('src', iurl);
+      $('#newBib').attr('value', bib);
+      $('#editModal').modal('show');
+    }
+    var btnZoomClick =  function(e){
+      iurl = e.target.id;
       $('#img-zoom-thumbnail').attr('src', iurl);
       $('#zoomModal').modal('show');
     }
@@ -48,7 +54,7 @@
             content +='<div class="col col-sm-3">';
             content += '<div class="thumbnail">';
             content += '<a href="' + data[i].href + '" target="_blank">';
-            content += '<img class="img-responsive" src="' + data[i].url + '" />';
+            content += '<img class="img-responsive" src="' + data[i].url + '" title="By ' + data[i].photographer +'" />';
 
             content += '</a>';
             content += '<div class="caption">';
@@ -58,10 +64,10 @@
             content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
             content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
             content += '</button>';
-            //content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
-            //content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
-            //content += '</button>';
-            content += '  By: ' + data[i].photographer;
+            content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
+            content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
+            content += '</button>';
+           //content += 'By:' + data[i].photographer;
             content += '</div>';
             content += '</div></div>';
             count++;
@@ -74,6 +80,7 @@
           content += '</div><script>';
           content += '$(\'.delete-btn\').bind(\'click\', btnDeleteClick);';
           content += '$(\'.zoom-btn\').bind(\'click\', btnZoomClick);';
+          content += '$(\'.edit-btn\').bind(\'click\', btnEditClick);';
           content += '\<\/script>';
           $('#searchresult').html(content); 
           $('#searchresult').collapse('show'); 
@@ -92,6 +99,28 @@
       bibSearchByBib(bib);
     }
     $(document).ready(function(){
+      $('#confirmEditButton').click(function() {
+        bibs = $('#newBib').attr('value');
+        if(bibs != undefined && bibs != null && bibs != "" && iurl != undefined && iurl != null && iurl != "") {
+          var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php';
+          var pdata = {
+            "bib" : bibs,
+            "oldbib" : bib,
+            "pass" : "idontlikepopmusic",
+            "url" : iurl,
+            "action" : "edit"
+          };
+          var jqxhr = $.post(query, pdata, function(data) {
+          }).done(function(data) {
+            location.reload();
+          }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+            alert(textStatus);
+          });
+
+          bib = null;
+          iurl = null;
+        }
+      });
       $('#confirmDeleteButton').click(function(){
         if(bib != undefined && bib != null && bib != "" && iurl != undefined && iurl != null && iurl != "") {
           var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php';
@@ -118,6 +147,7 @@
         res = pa.split('?bib=');
         bib = res[1];
         bibSearchByBib(bib);
+        $('#bib').attr('value', bib);
       }
     });
 </script>
@@ -152,6 +182,30 @@
                   <center>
                   <div class="container">
                   <img class="img-responsive" src="" id="img-zoom-thumbnail"/>
+                  </div>
+                  </center>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="editModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">แก้ไขรายชื่อ bib ที่อยู่ในรูป/Edit bib number</h4>
+                </div>
+                <div class="modal-body">
+                  <center>
+                  ในกรณีที่มีหลาย bib กรุณาใช้ลูกน้ำ ( , ) คั่นระหว่างเลข bib / In case of multiple bibs, please use commma ( , ) to separate them.
+                  <div class="container">
+                  <p><input type="text" id="newBib"></input></p>
+                  <p><button type="button" id="confirmDeleteButton">แก้ไข/Edit</button></p>
+                  <br />
+                  <img class="img-responsive" src="" id="img-edit-thumbnail"/>
                   </div>
                   </center>
                 </div>

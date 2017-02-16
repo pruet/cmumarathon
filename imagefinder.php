@@ -43,7 +43,7 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
         $doc['bib'] = $bib;
         $db->runnerimage->insert($doc);
       }
-      $db->runnerimage->remove(array('url' => $url, 'bib' => $oldbib));
+      $db->runnerimage->remove(array('_id' => $doc['id']), true);
     }
   } else {
   // incorrect pass
