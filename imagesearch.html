@@ -100,7 +100,7 @@
     }
     $(document).ready(function(){
       $('#confirmEditButton').click(function() {
-        bibs = $('#newBib').attr('value');
+        bibs = $('#newBib').val();
         if(bibs != undefined && bibs != null && bibs != "" && iurl != undefined && iurl != null && iurl != "") {
           var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagefinder.php';
           var pdata = {
