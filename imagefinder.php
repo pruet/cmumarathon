@@ -40,6 +40,7 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
       $doc = $db->runnerimage->findOne(array('url' => $url, 'bib' => $oldbib));
       foreach($bibs as $bib) {
         $bib = trim($bib);
+        unset($doc['_id']);
         $doc['bib'] = $bib;
         $db->runnerimage->insert($doc);
       }
