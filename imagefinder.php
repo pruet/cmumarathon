@@ -34,18 +34,21 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
     $bib = $_POST['bib'];
     $oldbib = $_POST['oldbib'];
     if($action == "delete") {
-      $db->runnerimage->remove(array('url' => $url, 'bib' => $bib));
+      //$db->runnerimage->remove(array('url' => $url, 'bib' => $bib));
+      $db->runnerimagereport->insert(array('url' => $url, 'bib' => $bib, 'action' => 'delete'));
     } else {
       $bibs = explode(',', $bib);
-      $doc = $db->runnerimage->findOne(array('url' => $url, 'bib' => $oldbib));
-      $oldid = $doc['_id'];
+      //$doc = $db->runnerimage->findOne(array('url' => $url, 'bib' => $oldbib));
+      //$oldid = $doc['_id'];
       foreach($bibs as $bib) {
-        unset($doc['_id']);
+        //unset($doc['_id']);
         $bib = trim($bib);
-        $doc['bib'] = $bib;
-        $db->runnerimage->insert($doc);
+        //$doc['bib'] = $bib;
+        //$db->runnerimage->insert($doc);
+        $db->runnerimagereport->insert(array('url' => $url, 'bib' => $bib, 'action' => 'add'));
       }
-      $db->runnerimage->remove(array('_id' => $oldid));
+      //$db->runnerimage->remove(array('_id' => $oldid));
+      $db->runnerimagereport->insert(array('url' => $url, 'bib' => $oldbib, 'action' => 'delete'));
     }
   } else {
   // incorrect pass

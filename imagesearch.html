@@ -61,12 +61,12 @@
             content += '<button type="button" id="' + data[i].url + '" class="btn zoom-btn btn-default btn-sm" align="right">';
             content += '<span class="glyphicon glyphicon-search" id="' + data[i].url + '" aria-hidden="true">';
             content += '</button>';
-            content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
-            content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
-            content += '</button>';
-            content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
-            content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
-            content += '</button>';
+            //content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
+            //content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
+            //content += '</button>';
+            //content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
+            //content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
+            //content += '</button>';
            //content += 'By:' + data[i].photographer;
             content += '</div>';
             content += '</div></div>';
@@ -254,7 +254,7 @@
               <input type="button" value="Search" id="bibsearch" class="btn btn-default"/>
               </p>
               <p>
-              <div class="alert alert-danger collapse" role="alert" id="bibalert">ไม่มีเลข Bib นี้/Bib not found</div>
+              <div class="alert alert-danger collapse" role="alert" id="bibalert">ไม่มีรูปสำหรับเลข Bib นี้/No images found for this Bib</div>
               <div class="alert alert-success collapse" role="alert" id="bibsuccess"></div>
               </p>
             </div>
@@ -265,13 +265,26 @@
       <div class="container collapse" id="searchresult">
       </div>
       <div class="container" id="listofurl">
-        ภาพจากช่างภาพ
-        <ul>
-        <li>Worarit Eampracha</li>
-        <li>Runningphotostock</li>
-        <li>Tar Wichean Singwern</li>
-        <li>Chanin Nopburi</li>
-        </ul>
+      <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h1 class="panel-title" class="control-label">ภาพจากช่างภาพ</h1>
+              </div>
+              <div class="panel-body">
+                <ul>
+                <li>Worarit Eampracha</li>
+                <li>Runningphotostock</li>
+                <li>Tar Wichean Singwern</li>
+                <li>Chanin Nopburi</li>
+                <li>Kamonwan Triem</li>
+                <li>Pkmon TeamDhara</li>
+                <li>Worarit Eampracha</li>
+                </ul>
+              </div>
+          </div>
+        </div>
       </div>
     </div><!-- /.container -->
     </div><!-- /.jumobotron -->
@@ -279,3 +292,4 @@
 
 </body>
 </html>
+

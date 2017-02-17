@@ -1,17 +1,32 @@
 <html>
 <body>
-<table border=1>
-<tr><td>BIB</td><td>count</td></tr>
 <?php
 require_once __DIR__ . '/config.php';
 
 $m = new MongoClient();
 $db = $m->cmumarathon;
 
-$docs = $db->runnerimage->distinct("bib");
+$count = $db->runnerimage->count();
+?>
+total = <?php echo $count ?> images <br />
+List of photographers:
+<ul>
+<?php
+$pho = $db->runnerimage->distinct("photographer");
+foreach($pho as $p)
+{
+  echo '<li>' . $p . '</li>';
+}
+?>
+</ul>
+<table border=1>
+<tr><td>BIB</td><td>count</td></tr>
+<?php
+$docs = $db->runnerimage->distinct('bib');
+sort($docs);
 foreach($docs as $doc) {
   $count = $db->runnerimage->count(array("bib"=>$doc));
-  echo "<tr><td>" . $doc . "</td><td>" . $count . "</td></tr>\n";
+  echo '<tr><td><a href="https://runnerapi.eng.cmu.ac.th/runnertracker/imagesearch.html?bib=' . $doc . '">' . $doc . '</a></td><td>' . $count . '</td></tr>';
 }
 ?>
 </table>
