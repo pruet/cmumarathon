@@ -149,6 +149,19 @@
         bibSearchByBib(bib);
         $('#bib').attr('value', bib);
       }
+      var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/photographerlist.php?pass=idontlikepopmusic';
+      var photographers = '<ul>';
+      var jqxhr = $.getJSON(query, function(data) {
+      }).done(function(data) {
+          for (var i in data) {
+            console.log()
+            photographers = photographers + '<li>' + data[i]['name'] + '</li>';
+          }
+          photographers = photographers + '</ul>';
+          $('#photographers').html(photographers); 
+      }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        alert(textStatus);
+      });
     });
 </script>
 
@@ -273,15 +286,8 @@
                 <h1 class="panel-title" class="control-label">ภาพจากช่างภาพ</h1>
               </div>
               <div class="panel-body">
-                <ul>
-                <li>Worarit Eampracha</li>
-                <li>Runningphotostock</li>
-                <li>Tar Wichean Singwern</li>
-                <li>Chanin Nopburi</li>
-                <li>Kamonwan Triem</li>
-                <li>Pkmon TeamDhara</li>
-                <li>Worarit Eampracha</li>
-                </ul>
+                <div id="photographers">
+                </div>
               </div>
           </div>
         </div>
