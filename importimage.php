@@ -39,9 +39,9 @@ if(isset($_POST['submit'])) {
           }
         } 
         $bib = strval($bib);
-        $href = strval($data[1]);
-        $url = strval($data[2]);
-        $photographer = strval($data[3]);
+        $href = trim(strval($data[1]));
+        $url = trim(strval($data[2]));
+        $photographer = trim(strval($data[3]));
         $db->runnerimage->insert(array(
           'bib' => $bib,
           'href' => $href,
