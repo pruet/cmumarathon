@@ -11,11 +11,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
 if(isset($_POST['submit'])) {
   $error = "";
-  $target_dir = 'uploads/';
-  $target_file = $target_dir . basename($_FILES['fileToUPload']['name']);
-  $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-
-  if($imageFileType != 'csv') {
+  $target_dir = '/tmp/';
+  $target_file = $target_dir . basename($_FILES['fileToUpload']['name']);
+  move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $target_file);
+  $image_file_type = pathinfo($target_file, PATHINFO_EXTENSION);
+  if($image_file_type != 'csv') {
     $error = 'Must be CSV file';
   }
 
@@ -86,5 +86,10 @@ if(isset($_POST['submit'])) {
     </div>
     </div>
     </form>
+    Example format:
+    <pre>
+9999,https://www.facebook.com/photo.php?fbid=393403041013280,https://scontent.fbkk2-1.fna.fbcdn.net/v/t31.0-8/16665333_393403041013280_4964422909169669671_o.jpg?oh=d319b6d9e54395fc4d6f7297ce2b04f4&oe=594C46A9,photo1
+9998,https://www.facebook.com/photo.php?fbid=393418451011739,https://scontent.fbkk2-1.fna.fbcdn.net/v/t31.0-8/16587277_393418451011739_5884118230187416244_o.jpg?oh=8889c7f821f62320029c639fd14c5c4b&oe=594763BE,photo2
+    </pre>
   </body>
 </html>
