@@ -61,26 +61,24 @@ if(isset($_POST['submit'])) {
     <link href="starter-template.css" rel="stylesheet">
   </head>
   <body>
-    <div class="jumbotron" id="home">
-      <div class="container" >
-        <?php echo $error ?>
-        <form method="post" enctype="multipart/form-data">
-          <div class="row">
-            <div class="col-sm-8">
-              <div class="panel panel-primary collapse" id="panelSubmit">
-                <div class="panel-heading">
-                  <h1 class="panel-title">CSV only!!!!!!!!!!!!!!!!!</h1>
-                </div>
-                <div class="panel-body">
-                  <input class="form-control" type="file" name="fileToUpload" id="fileToUpload" />
-                  <input class="form-control" type="text" name="pass" placeholder="Password" />
-                  <input class="form-control" type="submit" value="Upload data" name="submit" />
-                </div>
+    <div class="container" >
+      <?php echo $error ?>
+      <form method="post" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="panel panel-primary collapse" id="panelSubmit">
+              <div class="panel-heading">
+                <h1 class="panel-title">CSV only!!!!!!!!!!!!!!!!!</h1>
+              </div>
+              <div class="panel-body">
+                <input class="form-control" type="file" name="fileToUpload" id="fileToUpload" />
+                <input class="form-control" type="text" name="pass" placeholder="Password" />
+                <input class="form-control" type="submit" value="Upload data" name="submit" />
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </body>
 </html>
