@@ -1,3 +1,11 @@
+<html>
+  <head>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="starter-template.css" rel="stylesheet">
+    </head>
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
@@ -52,33 +60,31 @@ if(isset($_POST['submit'])) {
   }
 }
 ?>
-<html>
-  <head>
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <link href="starter-template.css" rel="stylesheet">
-  </head>
   <body>
-    <div class="container" >
+    <form method="post" enctype="multipart/form-data">
+    <div class="jumbotron" id="home">
+    <div class="container">
       <?php echo $error ?>
-      <form method="post" enctype="multipart/form-data">
         <div class="row">
-          <div class="col-sm-8">
-            <div class="panel panel-primary collapse" id="panelSubmit">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6">
+            <div class="panel panel-primary" id="panelSubmit">
               <div class="panel-heading">
                 <h1 class="panel-title">CSV only!!!!!!!!!!!!!!!!!</h1>
               </div>
               <div class="panel-body">
-                <input class="form-control" type="file" name="fileToUpload" id="fileToUpload" />
                 <input class="form-control" type="text" name="pass" placeholder="Password" />
+                <br />
+                <input class="form-control" type="file" name="fileToUpload" id="fileToUpload" />
+                <br />
                 <input class="form-control" type="submit" value="Upload data" name="submit" />
               </div>
             </div>
           </div>
+          <div class="col-sm-3"></div>
         </div>
-      </form>
     </div>
+    </div>
+    </form>
   </body>
 </html>
