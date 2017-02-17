@@ -61,12 +61,12 @@
             content += '<button type="button" id="' + data[i].url + '" class="btn zoom-btn btn-default btn-sm" align="right">';
             content += '<span class="glyphicon glyphicon-search" id="' + data[i].url + '" aria-hidden="true">';
             content += '</button>';
-            //content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
-            //content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
-            //content += '</button>';
-            //content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
-            //content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
-            //content += '</button>';
+            content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
+            content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
+            content += '</button>';
+            content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
+            content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
+            content += '</button>';
            //content += 'By:' + data[i].photographer;
             content += '</div>';
             content += '</div></div>';
@@ -211,14 +211,14 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">แก้ไขรายชื่อ bib ที่อยู่ในรูป/Edit bib number</h4>
+                  <h4 class="modal-title">แจ้งแก้ไขรายชื่อ bib ที่อยู่ในรูป/Edit bib number</h4>
                 </div>
                 <div class="modal-body">
                   <center>
                   ในกรณีที่มีหลาย bib กรุณาใช้ลูกน้ำ ( , ) คั่นระหว่างเลข bib / In case of multiple bibs, please use commma ( , ) to separate them.
                   <div class="container">
                   <p><input type="text" id="newBib"></input></p>
-                  <p><button type="button" id="confirmEditButton">แก้ไข/Edit</button></p>
+                  <p><button type="button" id="confirmEditButton">แจ้งแก้ไข/Edit</button></p>
                   <br />
                   <img class="img-responsive" src="" id="img-edit-thumbnail"/>
                   </div>
@@ -235,13 +235,13 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">ท่านต้องการลบรูปนี้ออกจากรายการรูปตามหมายเลข bib <span id="bibNum"></span> หรือไม่</h4>
+                  <h4 class="modal-title">ท่านต้องการแจ้งลบรูปนี้ออกจากรายการรูปตามหมายเลข bib <span id="bibNum"></span> หรือไม่</h4>
                 </div>
                 <div class="modal-body">
                   <center>
                   Please confirm that this picture is not belong to bib <span id="bibNumE"></span> and should be removed<br />
                   <div class="container">
-                  <p><button type="button" id="confirmDeleteButton">ลบ/Remove</button></p>
+                  <p><button type="button" id="confirmDeleteButton">แจ้งลบ/Remove</button></p>
                   <br />
                   <img class="img-responsive" src="" id="img-thumbnail"/>
                   </div>
@@ -283,7 +283,7 @@
         <div class="col-sm-8">
           <div class="panel panel-primary">
               <div class="panel-heading">
-                <h1 class="panel-title" class="control-label">ขอบคุณภาพจากช่างภาพ</h1>
+                <h1 class="panel-title" class="control-label">ขอขอบคุณท่านช่างภาพ</h1>
               </div>
               <div class="panel-body">
                 <div id="photographers">
