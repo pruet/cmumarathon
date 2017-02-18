@@ -28,6 +28,9 @@ if(isset($_POST['submit'])) {
     $out = '';
     if(($handle = fopen($target_file, 'r')) !== FALSE) {
       while(($data = fgetcsv($handle, 1000, ',')) != FALSE) {
+        if($data[0] == '' || $data[1] == '' || $data[2] == '') {
+          continue;
+        }
         $bib = intval($data[0]);
         if($bib < 10000) { // full/half/mini
           if($bib < 10) {
@@ -42,21 +45,24 @@ if(isset($_POST['submit'])) {
         $href = trim(strval($data[1]));
         $url = trim(strval($data[2]));
         $photographer = trim(strval($data[3]));
-        $db->runnerimage->insert(array(
-          'bib' => $bib,
-          'href' => $href,
-          'url' => $url,
-          'photographer' => $photographer
-        ));
-        $row++;
+        if($db->runnerimage->count(array('bib'=>$bib, 'url'=>$url)) == 0) {
+          $db->runnerimage->insert(array(
+            'bib' => $bib,
+            'href' => $href,
+            'url' => $url,
+            'photographer' => $photographer
+          ));
+          $row++;
+       }
       }
       $error =  'Inserted ' . strval($row) . '<br />';
-      $photographers = $db->runnerimage->distinct("photographer");
       $db->photographer->remove();
+      $photographers = $db->runnerimage->distinct("photographer");
       foreach($photographers as $photographer) {
         $db->photographer->insert(array("name" => $photographer));
       }
     }
+    $db->dbinfo->insert(array("update" => date("Y-m-d H:i:s")));
   }
 }
 ?>

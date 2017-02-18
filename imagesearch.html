@@ -16,22 +16,41 @@
     <link href="starter-template.css" rel="stylesheet">
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</head>
-<body>
 <script>
     var bib;
     var iurl;
     var btnEditClick =  function(e){
       iurl = e.target.id;
-      console.log(iurl);
-      $('#img-edit-thumbnail').attr('src', iurl);
-      $('#newBib').attr('value', bib);
-      $('#editModal').modal('show');
+      var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/bibfromimage.php?pass=idontlikepopmusic&url=' + encodeURIComponent(iurl);
+      var jqxhr = $.getJSON(query, function(data) {
+
+      }).done(function(data) {
+        var biblist = '';
+        for(var i in data) {
+          if(data[i].startsWith('u')) {
+            continue;
+          }
+          if(biblist != '') {
+            biblist = biblist + ','
+          }
+          biblist = biblist + data[i];
+        }
+        if(biblist == '') biblist = bib;
+        $('#img-edit-thumbnail').attr('src', iurl);
+        $('#newBib').attr('value', biblist);
+        $('#editModal').modal('show');
+      });
     }
     var btnZoomClick =  function(e){
       iurl = e.target.id;
-      $('#img-zoom-thumbnail').attr('src', iurl);
-      $('#zoomModal').modal('show');
+      var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/hreffromimage.php?pass=idontlikepopmusic&url=' + encodeURIComponent(iurl);
+      var jqxhr = $.getJSON(query, function(data) {
+
+      }).done(function(data) {
+        $('#img-zoom-thumbnail').attr('src', iurl);
+        $('#img-zoom-href').attr('href', data['href']);
+        $('#zoomModal').modal('show');
+      });
     }
     var btnDeleteClick =  function(e){
       iurl = e.target.id;
@@ -61,9 +80,9 @@
             content += '<button type="button" id="' + data[i].url + '" class="btn zoom-btn btn-default btn-sm" align="right">';
             content += '<span class="glyphicon glyphicon-search" id="' + data[i].url + '" aria-hidden="true">';
             content += '</button>';
-            content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
-            content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
-            content += '</button>';
+            //content += '<button type="button" id="' + data[i].url + '" class="btn delete-btn btn-default btn-sm" align="right">';
+            //content += '<span class="glyphicon glyphicon-trash" id="' + data[i].url + '" aria-hidden="true">';
+            //content += '</button>';
             content += '<button type="button" id="' + data[i].url + '" class="btn edit-btn btn-default btn-sm" align="right">';
             content += '<span class="glyphicon glyphicon-edit" id="' + data[i].url + '" aria-hidden="true">';
             content += '</button>';
@@ -95,7 +114,7 @@
       }
     }
     var bibSearch = function(){
-      bib = $('#bib').val();
+      bib = $('#bibtext').val();
       bibSearchByBib(bib);
     }
     $(document).ready(function(){
@@ -142,19 +161,23 @@
         } 
       });
       $('#bibsearch').click(bibSearch);
+      $('#bibtext').on('keyup', function(e) {
+        if(e.keyCode == 13) {
+          bibSearch();
+        }
+      });
       var pa = window.location.href;
       if(pa.includes('?bib=')) {
         res = pa.split('?bib=');
         bib = res[1];
         bibSearchByBib(bib);
-        $('#bib').attr('value', bib);
+        $('#bibtext').attr('value', bib);
       }
       var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/photographerlist.php?pass=idontlikepopmusic';
       var photographers = '<ul>';
       var jqxhr = $.getJSON(query, function(data) {
       }).done(function(data) {
           for (var i in data) {
-            console.log()
             photographers = photographers + '<li>' + data[i]['name'] + '</li>';
           }
           photographers = photographers + '</ul>';
@@ -162,19 +185,26 @@
       }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
         alert(textStatus);
       });
+      var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagedbinfo.php';
+      var photographers = '<ul>';
+      var jqxhr = $.getJSON(query, function(data) {
+      }).done(function(data) {
+        var out = "จำนวนรูปในระบบ " + data['numimage'] + ' รูป<br />';
+        out = out + "จำนวน bib ที่พบแล้ว " + data['numbib'] + ' หมายเลข<br />';
+        out = out + "ปรับปรุงข้อมูลครั้งสุดท้ายเมื่อ " + data['updated'] + '<br />';
+        $('#dbinfo').html(out); 
+      }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        alert(textStatus);
+      });
     });
 </script>
+</head>
+<body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand">CMU Marathon Runner's Images Searcher</a>
+          <h1><font color="#D3D3D3">CMU Marathon Runner's Images Searcher</font></h1>
         </div>
       </div>
     </nav>
@@ -185,7 +215,7 @@
         <h1>CMU Marathon Runner's Images Searcher</h1>
         -->
         <p>
-          โปรแกรมค้นหารูปภาพจากเลข bib กรุณากรอกเลข bib ของท่านในช่องด้านล่าง แล้วกดปุ่ม Search  ท่านสามารถคลิกที่รูปเพื่อไปยังหน้า Facebok ของรูป หรือกด Ctrl (Cmd) ค้างไว้ก่อนคลิกเพื่อเปิดในหน้าใหม่
+          โปรแกรมค้นหารูปภาพจากเลข bib กรุณากรอกเลข bib ของท่านในช่องด้านล่าง แล้วกดปุ่ม Search  ท่านสามารถคลิกที่รูปเพื่อไปยังหน้า Facebok ของรูป หรือกด Ctrl (Cmd) ค้างไว้ก่อนคลิกเพื่อเปิดในหน้าใหม่ <br /><b>หมายเหตุ:</b>โปรแกรมใช้ระบบวิเคราะห์ภาพเพื่อวิเคราะห์หาเลข bib จากในรูป ซึ่งถ้ารูปไม่ชัด หรือไม่เห็น bib ก็จะหาภาพไม่เจอนะครับ
           </p>
           <div class="modal fade" id="zoomModal" role="dialog">
             <div class="modal-dialog">
@@ -196,7 +226,9 @@
                 <div class="modal-body">
                   <center>
                   <div class="container">
+                  <a href="" id="img-zoom-href" target="_blank">
                   <img class="img-responsive" src="" id="img-zoom-thumbnail"/>
+                  </a>
                   </div>
                   </center>
                 </div>
@@ -263,11 +295,11 @@
             <div class="panel-body">
               <p>
                 กรุณากรอกตัวเลขเฉพาะ 4 ตัวท้าย (full/half/mini marathon) หรือ 6 ตัว (fun run) เช่นถ้า bib เป็น 18M0010 กรุณากรอกแค่ 0010, ถ้า bib ท่านมีเลขศูนย์นำหน้า กรุณาใส่เลขศูนย์ด้วย
-              <input type="text" maxlength="6" name="bib" id="bib" class="form-control" required placeholder="Only last 4/6 digits, including leading zeros" />
+              <input type="text" maxlength="6" name="bib" id="bibtext" class="form-control" required placeholder="Only last 4/6 digits, including leading zeros" />
               <input type="button" value="Search" id="bibsearch" class="btn btn-default"/>
               </p>
               <p>
-              <div class="alert alert-danger collapse" role="alert" id="bibalert">ไม่มีรูปสำหรับเลข Bib นี้/No images found for this Bib</div>
+              <div class="alert alert-danger collapse" role="alert" id="bibalert">ยังไม่มีรูปสำหรับเลข Bib นี้ เรากำลังเพิ่มรูปเรื่อย ๆ กรุณากลับมาดูอีกครั้ง/No images found for this Bib</div>
               <div class="alert alert-success collapse" role="alert" id="bibsuccess"></div>
               </p>
             </div>
@@ -279,8 +311,7 @@
       </div>
       <div class="container" id="listofurl">
       <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
           <div class="panel panel-primary">
               <div class="panel-heading">
                 <h1 class="panel-title" class="control-label">ขอขอบคุณท่านช่างภาพ</h1>
@@ -291,7 +322,17 @@
               </div>
           </div>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h1 class="panel-title" class="control-label">ข้อมูลระบบ</h1>
+              </div>
+              <div class="panel-body">
+                <div id="dbinfo">
+                </div>
+              </div>
+          </div>
+        </div>
       </div>
     </div><!-- /.container -->
     </div><!-- /.jumobotron -->

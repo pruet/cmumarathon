@@ -35,20 +35,27 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
     $oldbib = $_POST['oldbib'];
     if($action == "delete") {
       //$db->runnerimage->remove(array('url' => $url, 'bib' => $bib));
-      $db->runnerimagereport->insert(array('url' => $url, 'bib' => $bib, 'action' => 'delete'));
-    } else {
-      $bibs = explode(',', $bib);
+      $db->runnerimagereport->insert(array('url' => $url, 'bib' => $bib, 'action' => 'delete', 'status' => 'new'));
+    } else { //edit
+      $bibs = array_map('trim', explode(',', $bib));
       //$doc = $db->runnerimage->findOne(array('url' => $url, 'bib' => $oldbib));
       //$oldid = $doc['_id'];
+      $contain_old_bib = false;
       foreach($bibs as $bib) {
         //unset($doc['_id']);
         $bib = trim($bib);
         //$doc['bib'] = $bib;
         //$db->runnerimage->insert($doc);
-        $db->runnerimagereport->insert(array('url' => $url, 'bib' => $bib, 'action' => 'add'));
+        if($bib != $oldbib) {
+          $db->runnerimagereport->insert(array('url' => $url, 'bib' => $bib, 'action' => 'add', 'status' => 'new'));
+        } else {
+          $contain_old_bib = true;
+        }
       }
       //$db->runnerimage->remove(array('_id' => $oldid));
-      $db->runnerimagereport->insert(array('url' => $url, 'bib' => $oldbib, 'action' => 'delete'));
+      if(!$contain_old_bib) {
+        $db->runnerimagereport->insert(array('url' => $url, 'bib' => $oldbib, 'action' => 'delete', 'status' => 'new'));
+      }
     }
   } else {
   // incorrect pass
