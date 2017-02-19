@@ -6,7 +6,7 @@ require_once __DIR__ . '/config.php';
 $m = new MongoClient();
 $db = $m->cmumarathon;
 
-$count = $db->runnerimage->count();
+$count = $db->runnerimage->distinct("url");
 ?>
 total = <?php echo $count ?> images <br />
 List of photographers:
