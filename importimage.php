@@ -45,15 +45,17 @@ if(isset($_POST['submit'])) {
         $href = trim(strval($data[1]));
         $url = trim(strval($data[2]));
         $photographer = trim(strval($data[3]));
-        if($db->runnerimage->count(array('bib'=>$bib, 'url'=>$url)) == 0) {
-          $db->runnerimage->insert(array(
-            'bib' => $bib,
-            'href' => $href,
-            'url' => $url,
-            'photographer' => $photographer
-          ));
-          $row++;
-       }
+        if($bib != "" && $href != "" && $url != "" && $photographer != "") {
+          if($db->runnerimage->count(array('bib'=>$bib, 'url'=>$url)) == 0) {
+            $db->runnerimage->insert(array(
+              'bib' => $bib,
+              'href' => $href,
+              'url' => $url,
+              'photographer' => $photographer
+            ));
+            $row++;
+          }
+        }
       }
       $error =  'Inserted ' . strval($row) . '<br />';
       $db->photographer->remove();
