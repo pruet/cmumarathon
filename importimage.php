@@ -32,7 +32,7 @@ if(isset($_POST['submit'])) {
           continue;
         }
         $bib = intval($data[0]);
-        if($bib < 10000) { // full/half/mini
+        if($bib < 10000 && $bib > 0) { // full/half/mini
           if($bib < 10) {
             $bib = '000' . strval($bib);
           } else if($bib < 100) {
@@ -45,6 +45,9 @@ if(isset($_POST['submit'])) {
         $href = trim(strval($data[1]));
         $url = trim(strval($data[2]));
         $photographer = trim(strval($data[3]));
+        if($photographer == "laon") {
+          $photographer = "ละอ่อนคนเมือง";
+        }
         if($bib != "" && $href != "" && $url != "" && $photographer != "") {
           if($db->runnerimage->count(array('bib'=>$bib, 'url'=>$url)) == 0) {
             $db->runnerimage->insert(array(

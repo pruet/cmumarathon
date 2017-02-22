@@ -8,7 +8,7 @@ $db = $m->cmumarathon;
 
 $count = $db->runnerimage->distinct("url");
 ?>
-total = <?php echo $count ?> images <br />
+total = <?php echo count($count) ?> images <br />
 List of photographers:
 <ul>
 <?php
@@ -25,8 +25,10 @@ foreach($pho as $p)
 $docs = $db->runnerimage->distinct('bib');
 sort($docs);
 foreach($docs as $doc) {
-  $count = $db->runnerimage->count(array("bib"=>$doc));
-  echo '<tr><td><a href="https://runnerapi.eng.cmu.ac.th/runnertracker/imagesearch.html?bib=' . $doc . '">' . $doc . '</a></td><td>' . $count . '</td></tr>';
+  if($doc[0] != 'u') {
+    $count = $db->runnerimage->count(array("bib"=>$doc));
+    echo '<tr><td><a href="https://runnerapi.eng.cmu.ac.th/runnertracker/imagesearch.html?bib=' . $doc . '">' . $doc . '</a></td><td>' . $count . '</td></tr>';
+  }
 }
 ?>
 </table>
