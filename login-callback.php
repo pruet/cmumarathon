@@ -39,10 +39,10 @@ if (isset($accessToken)) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>CMU Marathon Runner Tracker: Login</title>
+  <title>CMU Marathon Runner's Track Me: Login</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Login page for CMU Marathon Runner Tracker Facebook App">
-  <meta name="keywords" content="CMU, Marathon, Tracker, Facebook">
+  <meta name="description" content="Login page for CMU Marathon Runner's Track Me Facebook App">
+  <meta name="keywords" content="CMU, Marathon, Track Me, Tracker, Facebook">
   <meta name="author" content="CMU Marathon Technical Team">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -153,7 +153,7 @@ if (isset($accessToken)) {
 <body>
       <div class="jumbotron" id="home">
       <div class="container" >
-    <h1>CMU Marathon Runner Tracker Facebook App</h1>
+    <h1>CMU Marathon Runner's Track me Facebook App</h1>
     <p class="lead">
       Please provide your bib number, name and when you want to publish your progress. The name will be shown on the badge posted on your Facebook wall. If you have already provided the information, you are all set, please close this browser window and see you on the race day!. If you don't know your bib number, you can <button type="button" class="btn btn-info" data-toggle="modal" data-target="#bibModal">search for it</button>
     </p>

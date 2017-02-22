@@ -49,10 +49,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>CMU Marathon Runner Tracker: Login</title>
+  <title>CMU Marathon Runner's Track Me: Register</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Login page for CMU Marathon Runner Tracker Facebook App">
-  <meta name="keywords" content="CMU, Marathon, Tracker, Facebook">
+  <meta name="description" content="Register Page for CMU Marathon Runner's Track Me Facebook App">
+  <meta name="keywords" content="CMU, Marathon, Track Me, Tracker, Facebook">
   <meta name="author" content="CMU Marathon Technical Team">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -68,7 +68,7 @@
 <body>
       <div class="jumbotron" id="home">
       <div class="container" >
-        <h1>CMU Marathon Runner Tracker Facebook App</h1>
+        <h1>CMU Marathon Runner's Track Me Facebook App</h1>
         <p class="lead">
         <?php 
           echo $status; 
