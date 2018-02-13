@@ -220,7 +220,7 @@
         <h1>CMU Marathon Runner's Images Searcher</h1>
         -->
         <p>
-          โปรแกรมจะค้นหารูปภาพจากเลข bib กรุณากรอกเลข bib ของท่านในช่องด้านล่าง แล้วกดปุ่ม Search <br /> ท่านสามารถคลิกที่รูปเพื่อไปยังหน้า Facebok ของรูป หรือกด Ctrl (Cmd) ค้างไว้ก่อนคลิกเพื่อเปิดในหน้าใหม่ <br /><b>หมายเหตุ:</b>โปรแกรมใช้ระบบวิเคราะห์ภาพเพื่อวิเคราะห์หาเลข bib จากในรูป ซึ่งถ้ารูปไม่ชัด หรือไม่เห็น bib ก็จะหาภาพไม่เจอนะครับ
+          โปรแกรมจะค้นหารูปภาพจากเลข bib กรุณากรอกเลข bib ของท่านในช่องด้านล่าง แล้วกดปุ่ม Search <br /> ท่านสามารถคลิกที่รูปเพื่อไปยังหน้า Facebook ของรูป หรือกด Ctrl (Cmd) ค้างไว้ก่อนคลิกเพื่อเปิดในหน้าใหม่ <br /><b>หมายเหตุ:</b>โปรแกรมใช้ระบบวิเคราะห์ภาพเพื่อวิเคราะห์หาเลข bib จากในรูป ซึ่งถ้ารูปไม่ชัด หรือไม่เห็น bib ก็จะหาภาพไม่เจอนะครับ
           </p>
           <div class="modal fade" id="zoomModal" role="dialog">
             <div class="modal-dialog">
@@ -299,12 +299,12 @@
             </div>
             <div class="panel-body">
               <p>
-                กรุณากรอกตัวเลขเฉพาะ 4 ตัวท้าย (full/half/mini marathon) หรือ 6 ตัว (fun run) เช่นถ้า bib เป็น 18M0010 กรุณากรอกแค่ 0010, ถ้า bib ท่านมีเลขศูนย์นำหน้า กรุณาใส่เลขศูนย์ด้วย
-              <input type="text" maxlength="6" name="bib" id="bibtext" class="form-control" required placeholder="Only last 4/6 digits, including leading zeros" />
+                กรุณากรอกเลข Bib 4 ตัว (full/half/mini marathon/fun run) ถ้า bib ท่านมีเลขศูนย์นำหน้า กรุณาใส่เลขศูนย์ด้วย
+              <input type="text" maxlength="6" name="bib" id="bibtext" class="form-control" required placeholder="Only 4 digits Bib number, including leading zeros" />
               <input type="button" value="Search" id="bibsearch" class="btn btn-default"/>
               </p>
               <p>
-              <div class="alert alert-danger collapse" role="alert" id="bibalert">ยังไม่มีรูปสำหรับเลข Bib นี้ เรากำลังเพิ่มรูปเรื่อย ๆ กรุณากลับมาดูอีกครั้ง/No images found for this Bib</div>
+              <div class="alert alert-danger collapse" role="alert" id="bibalert">ยังไม่มีรูปสำหรับเลข Bib นี้ เรากำลังเพิ่มรูปเรื่อย ๆ กรุณากลับมาดูอีกครั้ง/No images found for this Bib yet</div>
               <div class="alert alert-success collapse" role="alert" id="bibsuccess"></div>
               </p>
             </div>
