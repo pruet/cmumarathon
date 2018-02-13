@@ -2,7 +2,7 @@
 require_once __DIR__ . '/config.php';
 
 $m = new MongoClient();
-$db = $m->cmumarathon;
+$db = $m->selectDB($racedb);
 
 $row = 1;
 $colNum = 4;

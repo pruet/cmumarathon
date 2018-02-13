@@ -9,7 +9,7 @@ header('Access-Control-Allow-Origin: *');
 
 if(isset($pass) && ($pass == $imagefinder_pass) && isset($url)) {
   $m = new MongoClient();
-  $db = $m->cmumarathon;
+  $db = $m->selectDB($racedb);
   if(($docs = $db->runnerimage->find(array('url' => $url))) != NULL) {
     if($docs->count() == 0) {
       // no image for this bibib

@@ -21,7 +21,7 @@ if(isset($_POST['submit'])) {
 
   if($error == "") {
     $m = new MongoClient();
-    $db = $m->cmumarathon;
+    $db = $m->selectDB($racedb);
 
     $row = 1;
     $colNum = 4;

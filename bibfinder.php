@@ -1,6 +1,6 @@
 <?php
 //require_once __DIR__ . '/vendor/autoload.php';
-//require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/config.php';
 
 function clean($in)
 {
@@ -19,7 +19,7 @@ $pass =$_GET['pass'];
 
 if(isset($pass) && ($pass == $bibfinder_pass) && isset($txt)) {
   $m = new MongoClient();
-  $db = $m->cmumarathon;
+  $db = $m->selectDB($racedb);
   $regex = new MongoRegex("/" . $txt . "/i");
   $searchQuery = array(
     '$or' => array (

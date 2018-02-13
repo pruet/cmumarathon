@@ -3,7 +3,7 @@ require_once __DIR__ . '/config.php';
 // for dev
 header('Access-Control-Allow-Origin: *');  
 $m = new MongoClient();
-$db = $m->cmumarathon;
+$db = $m->selectDB($racedb);
 $result = array();
 $all = $db->runnerimage->distinct("url");
 //$ua = $db->runnerimage->count(array('bib' => new MongoRegex('/^u/')));

@@ -4,7 +4,7 @@
 require_once __DIR__ . '/config.php';
 
 $m = new MongoClient();
-$db = $m->cmumarathon;
+$db = $m->selectDB($racedb);
 
 $count = $db->runnerimage->distinct("url");
 ?>

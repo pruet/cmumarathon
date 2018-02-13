@@ -1,6 +1,6 @@
 <?php
 //require_once __DIR__ . '/vendor/autoload.php';
-//require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/config.php';
 
 $bib = intval($_GET['bib']);
 $pass =$_GET['pass'];
@@ -10,7 +10,7 @@ $pass =$_GET['pass'];
 
 if(isset($pass) && ($pass == $bibfinder_pass) && isset($bib)) {
   $m = new MongoClient();
-  $db = $m->cmumarathon;
+  $db = $m->selectDB($racedb);
   if(($doc = $db->runnerinfo->findOne(array('bib' => intval($bib)))) != NULL) {
     $doc['_id'] = NULL;
     $doc['id'] = NULL;

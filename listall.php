@@ -1,6 +1,7 @@
 <?php
+    require_once __DIR__ . '/config.php';
     $m = new MongoClient();
-    $db = $m->cmumarathon;
+    $db = $m->selectDB($racedb);
     $coll = $db->runnertracker;
 ?>
 

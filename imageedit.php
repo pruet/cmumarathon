@@ -14,7 +14,7 @@ if($_GET['pass'] != 'idontlikepopmusic' && $_POST['pass'] != 'idontlikepopmusic'
 return;
 }
 $m = new MongoClient();
-$db = $m->cmumarathon;
+$db = $m->selectDB($racedb);
 
 if($_POST['submit'] == 'Reject') {
   $bib = $_POST['bib'];
