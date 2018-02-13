@@ -196,7 +196,7 @@
       }).done(function(data) {
         var out = "จำนวนรูปในระบบ " + data['numimage'] + ' รูป<br />';
         out = out + "จำนวน bib ที่พบแล้ว " + data['numbib'] + ' หมายเลข<br />';
-        if(date['updated'] == null) {
+        if(data['updated'] == null) {
           out = out + "ยังไม่มีข้อมูลในระบบ";
         } else {
           out = out + "ปรับปรุงข้อมูลครั้งสุดท้ายเมื่อ " + data['updated'] + '<br />';
