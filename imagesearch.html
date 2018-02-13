@@ -183,7 +183,12 @@
           photographers = photographers + '</ul>';
           $('#photographers').html(photographers); 
       }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        alert('photographerlist:' + textStatus);
+        if(XMLHttpRequest.status == 404) {
+          photographers = "No photographers in the system.";
+          $('#photographers').html(photographers); 
+        } else {
+          alert('photographerlist:' + textStatus);
+        }
       });
       var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagedbinfo.php';
       var photographers = '<ul>';
