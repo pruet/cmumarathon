@@ -133,7 +133,7 @@
           }).done(function(data) {
             location.reload();
           }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-            alert(textStatus);
+            alert('confirmEditButton:' + textStatus);
           });
 
           bib = null;
@@ -153,7 +153,7 @@
           }).done(function(data) {
             location.reload();
           }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-            alert(textStatus);
+            alert('confirmDeleteButton' + textStatus);
           });
 
           bib = null;
@@ -183,7 +183,7 @@
           photographers = photographers + '</ul>';
           $('#photographers').html(photographers); 
       }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        alert(textStatus);
+        alert('photographerlist:' + textStatus);
       });
       var query = 'https://runnerapi.eng.cmu.ac.th/runnertracker/imagedbinfo.php';
       var photographers = '<ul>';
@@ -194,7 +194,7 @@
         out = out + "ปรับปรุงข้อมูลครั้งสุดท้ายเมื่อ " + data['updated'] + '<br />';
         $('#dbinfo').html(out); 
       }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        alert(textStatus);
+        alert('imagedbinfo:' + textStatus);
       });
     });
 </script>
