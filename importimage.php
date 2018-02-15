@@ -9,7 +9,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/config.php';
-if(isset($_POST['submit'])) {
+if(isset($_POST['submit']) && isset($_POST['pass']) && $_POST['pass'] == $imagefinder_pass) {
   $error = "";
   $target_dir = '/tmp/';
   $target_file = $target_dir . basename($_FILES['fileToUpload']['name']);
