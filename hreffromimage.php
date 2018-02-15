@@ -9,7 +9,7 @@ header('Access-Control-Allow-Origin: *');
 
 if(isset($pass) && ($pass == $imagefinder_pass) && isset($url)) {
   $m = new MongoClient();
-  $db = $m->cmumarathon;
+  $db = $m->selectDB($racedb);
   $url = urldecode($url);
   if(($doc = $db->runnerimage->findOne(array('url' => $url))) != NULL) {
     http_response_code(200);
