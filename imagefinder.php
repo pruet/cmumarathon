@@ -28,7 +28,7 @@ if(isset($pass) && ($pass == $imagefinder_pass) && isset($bib)) {
   $pass = $_POST['pass'];
   if(isset($pass) && $pass == $imagefinder_pass) {
     $m = new MongoClient();
-    $db = $m->cmumarathon;
+    $db = $m->selectDB($racedb);
     $action = $_POST['action'];
     $url = $_POST['url'];
     $bib = $_POST['bib'];
